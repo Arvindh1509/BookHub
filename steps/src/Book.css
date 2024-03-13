@@ -1,0 +1,51 @@
+.book{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 10px;
+    gap: 20px;
+    padding: 20px;
+    width: 20%;
+    /* max-width: 400px; */
+    /* min-width: 100px; */
+    background-color: white;
+    z-index: 1;
+    border-radius: 9px;
+
+}
+
+.book_img{
+    max-height: 200px;
+    width: 100%;
+}
+
+.book > button{
+    background-color: gainsboro;
+    border: 1px solid;
+    color: #111;
+    border-radius: 10px;
+
+}
+
+.book_price
+{
+    margin-bottom: 5px;
+}
+.book_info{
+    display: flex;
+    flex-direction: column;
+    height: fit-content;
+    margin-bottom: 15px;
+}
+
+.book_rating{
+    display: flex;
+}
+.book_quantity_in>h4{
+    color: green;
+}
+
+.book_quantity_out>h4{
+    color: red;
+}

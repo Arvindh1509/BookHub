@@ -1,0 +1,63 @@
+.book_seperate{
+    display: flex;
+    margin-left: 15px;
+    margin-top: 20px;
+    /* align-items: center; */
+}
+.book_seperate>img{
+    object-fit: contain;
+    width: 20%;
+    padding-right: 10px;
+    border-right: 1px solid gainsboro;
+}
+.second_section{
+    display: flex;
+    flex-direction: column;
+    margin-left: 15px;
+
+}
+
+.book_seperate_title{
+    font-size: 25px;
+
+}
+
+.book_seperate_rating{
+    display: flex;
+    padding-bottom: 10px;
+    align-items: center;
+    border-bottom: 1px solid gainsboro;
+}
+.book_seperate_rating>p{
+    padding-right:5px ;
+}
+
+.book_seperate_price{
+    margin-top: 20px;
+}
+
+.second_section>button{
+    background-color: red;
+    border-radius: 5px;
+    width: 80%;
+    height: 30px;
+    border: 1px solid;
+    margin-top: 10px;
+    color: white;
+    font-weight: 650;
+}
+
+.star{
+    color: 	#FFFF33;
+}
+
+.description{
+    align-items: center;
+    text-align:justify;
+    padding-right: 15px;
+    padding-top: 10px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid gainsboro;
+    font-weight: 500;
+    font-size: 18px;
+}

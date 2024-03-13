@@ -1,0 +1,39 @@
+.checkout_book{
+    display: flex;
+    margin-top:20px ;
+    margin-bottom: 10px;
+    align-items: center;
+}
+
+.checkout_book_img{
+    width:180px;
+    height: 180px;
+    object-fit: contain;
+}
+
+.checkout_book_info{
+    padding-left: 20px;
+}
+
+.checkout_book_info>button{
+    background-color: red;
+    border-radius: 5px;
+    width: 200px;
+    /* height: 20%; */
+    border: 1px solid;
+    margin-top: 10px;
+    color: white;
+    font-weight: 650;
+    /* text-size-adjust: 20%; */
+}
+
+
+
+.checkout_book_rating{
+    display: flex;
+}
+
+.checkout_book_title{
+    font-size: 17px;
+    font-weight: 500;
+}

@@ -1,0 +1,21 @@
+.Order{
+    margin-left: 20px;
+    margin-right: 20px;
+    max-width: fit-content;
+    border: 2px solid black;
+}
+
+.order_header{
+    display: flex;
+    justify-content:space-around;
+    border: none;
+    background-color: gainsboro;
+}
+
+.gift{
+    color: green;
+}
+
+.order_container{
+    padding-right: 5px;
+}
