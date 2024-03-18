@@ -32,6 +32,61 @@ app.get('/books', async (req, res) => {
   }
 });
 
+app.post('/ordersHistory',async(req,res)=>{
+  try {
+    Email=req.body.userEmail;
+
+    const connection = await OracleDB.getConnection(dbConfig);
+    let orderid={};
+    const cart=await connection.execute(`SELECT ORDER_ID FROM ORDERS WHERE EMAIL=:email`,{Email});
+    for (const [index, row] of cart.rows.entries()) {
+      orderid[`${index + 1}`] = row[0];
+    }
+    console.log("-------------->",orderid);
+    // console.log(cart.rows);
+    
+    var orderisbns = {};
+    for (const orderIdArr of Object.values(orderid)) {
+      const orderId = orderIdArr;
+      console.log("inside isbns------------->", orderId);
+      const ans = await connection.execute(`SELECT * 
+      FROM BOOKS 
+      WHERE ISBN IN (SELECT P.ISBN 
+                     FROM ORDERS O 
+                     JOIN ORDER_ITEMS P ON O.ORDER_ID = P.ORDER_ID 
+                     WHERE O.ORDER_ID = :orderid)`, { orderid: orderId });
+                     console.log(ans.rows);
+      orderisbns[`${orderId}`] = ans.rows;
+    }
+    // console.log(orderisbns);
+
+
+       
+    res.send({orderid,orderisbns});
+
+  } catch (error) {
+    console.log(error);
+    res.send(error);
+    
+  }
+})
+
+app.post('/ordersample', async(req,res)=>{
+
+  const details=req.body.email;
+  const connection=OracleDB.getConnection(dbConfig);
+
+  var ans;
+  details.map(item=>{
+   try{ ans= connection.execute(`SELECT P.ISBN FROM ORDERS O JOIN ORDER_ITEMS P
+                            ON O.ORDER_ID = P.ORDER_ID WHERE O.ORDER_ID = :orderId`, { orderId: item })
+    console.log(ans.rows);}
+    catch(err){
+      console.log(err);
+    }
+  })
+})
+
 app.post('/book_insert',async(req,res)=>{
   const book_details=req.body;
   try {
@@ -108,6 +163,9 @@ app.post('/login', async (req, res) => {
       const userDetails=req.body;
   
       const connection = await OracleDB.getConnection(dbConfig);
+
+      // const cart=await connection.execute( `select * from `)
+
       const checkResult=await connection.execute(`SELECT * FROM USERS WHERE EMAIL=:email`,[userDetails.email]);  
       if(checkResult.rows.length>0){
         // console.log(checkResult.rows);
@@ -116,6 +174,7 @@ app.post('/login', async (req, res) => {
         const storedPassword=user[3];
         console.log(storedPassword);
         const userName=user[0];
+        const userEmail=user[2];
         const userAddress=user[4];
         // console.log(userAddress);
         const binds={
@@ -128,7 +187,7 @@ app.post('/login', async (req, res) => {
           }
           else{
            if(result)
-           { res.send({userName,userAddress});
+           { res.send({userName,userAddress,userEmail});
            
           // console.log(userName);
         }
@@ -145,6 +204,81 @@ app.post('/login', async (req, res) => {
       res.send(error);
     }
   });
+
+app.post('/order_placing',async(req,res)=>{
+  try {
+    const userDetails=req.body;
+    
+    const connection= await OracleDB.getConnection(dbConfig);
+    const sql1=`INSERT INTO ORDERS(ORDER_ID,EMAIL,TOTAL_AMOUNT,ORDER_DATE,ORDER_STATUS) VALUES(
+                  S2.nextval,:userEmail,:total,SYSDATE,'DISPATCHED') `
+ 
+    const binds={
+      userEmail:userDetails.userEmail, //SQL1
+      total:userDetails.total
+    }
+
+
+    // console.log("Inside Server",binds.total);
+
+
+    await connection.execute(sql1,binds,{autoCommit:true});
+
+    console.log("Inside Server",binds.total);
+
+    const result =await connection.execute(`SELECT S2.CURRVAL FROM DUAL`);
+    
+    // console.log("InsideServer",binds.orderId);
+
+    // await connection.execute(sql2,{ id: userDetails.id },{autoCommit:true});
+
+    await connection.close();
+
+    console.log("order saved successfully in orders");
+    console.log(result.rows[0][0]);
+    res.send(result.rows[0])
+    
+    // res.send("Order inserted successfully!");
+    
+
+    
+  } catch (error) {
+    console.log(error);
+    res.send("Error")
+  }
+})  
+
+app.post('/order_items_placing',async(req,res)=>{
+  try {
+    const details=req.body;
+    
+    const connection= await OracleDB.getConnection(dbConfig);
+    // const sql1=`INSERT INTO ORDERS(ORDER_ID,EMAIL,TOTAL_AMOUNT,ORDER_DATE,ORDER_STATUS) VALUES(
+    //               8,:userEmail,:total,SYSDATE,'DISPATCHED') RETURNING ORDER_ID INTO :orderId`
+    const sql2=`INSERT INTO ORDER_ITEMS(ORDER_ID,ISBN,QUANTITY) VALUES(
+                  :orderId,:id,10)`
+    const binds={
+     //SQL1
+     orderId:details.orderId,
+      id:details.id
+    }
+    console.log(binds.orderId);
+    console.log("Inside Server",binds.id)
+    await connection.execute(sql2,binds,{autoCommit:true});
+    
+
+    await connection.close();
+
+    console.log("order saved successfully in order_items"); 
+    res.send("Order inserted successfully!");
+    
+
+    
+  } catch (error) {
+    console.log(error);
+    res.send("Error")
+  }
+})  
 
 app.post('/payments/create',async(req,res)=>{
     const total=req.query.total;
@@ -164,13 +298,17 @@ app.post('/payments/create',async(req,res)=>{
       },
       amount: req.query.total,
       currency: 'inr',
-      payment_method_types: ['card'],
+      automatic_payment_methods:{
+        enabled:true
+      },
     });
     res.status(201).send({
       clientSecret :paymentIntent.client_secret, 
+      total
     })
+    console.log(paymentIntent.client_secret);
   }else{
-    console.log("Cursor is here>>>");
+    // console.log("Cursor is here>>>");
   res.status(201).send("No Orders")}
   })
 

@@ -18,6 +18,9 @@ const promise=loadStripe('pk_test_51Os1YBSGWWLum80t1jDc4VyVDFG3mT5kPSfzZeWaOktoI
 
 function App() {
   
+  
+
+
   return (
     <Router>
     <div className="App">
@@ -50,7 +53,9 @@ function App() {
         <Route path='/payment'>
           <Header/>
           <Elements stripe={promise}>
-          <Payment/>
+          <Payment
+            promise={promise}
+          />
           </Elements>
         </Route>
         <Route path='/'>

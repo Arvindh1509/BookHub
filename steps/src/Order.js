@@ -7,15 +7,21 @@ import './Order.css';
 
 function Order() {
     const [{order,checkbox,user,price}]=useStateValue();
+    const today = new Date();
+  
+  const day = today.getDate();
+  const month = today.getMonth() + 1; 
+  const year = today.getFullYear();
+  const formattedDate = `${day}-${month}-${year}`;
   return (
     <div className='Order'>
         <div className='order_header'>
         <div>
         <p><strong>Order placed on</strong></p>
-        <p>13/03/24</p>
+        <p>{formattedDate}</p>
         </div>
         {checkbox?<p className='gift'>This is a gift</p>:""}
-        {console.log("Eroor is here")}
+        {/* {console.log("Error is here")} */}
 <CurrencyFormat 
                     renderText={(value)=>(
                         <div className='currency'>

@@ -3,6 +3,7 @@ export const initialState={
     order:[],
     viewedBook:null,
     user:null,
+    userEmail:null,
     userAddress:null,
     checkbox:false,
     price:0,
@@ -37,7 +38,8 @@ function reducer(state,action){
                 return{
                     ...state,
                     user:action.user,
-                    userAddress:action.userAddress
+                    userAddress:action.userAddress,
+                    userEmail:action.userEmail
                 }
 
         case 'logout':

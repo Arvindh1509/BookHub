@@ -24,7 +24,8 @@ function Login() {
             dispatch({
                 type:'login',
                 user:data.data.userName,
-                userAddress:data.data.userAddress
+                userAddress:data.data.userAddress,
+                userEmail:data.data.userEmail
             })
             // console.log(data.data.userName);
             history.push('/');

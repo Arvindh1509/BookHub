@@ -5,17 +5,27 @@ import './Payment.css'
 import { Link, useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 import { getBasketTotal } from './Reducer';
 import CurrencyFormat from 'react-currency-format';
-import { PaymentElement,CardElement,useElements, useStripe } from '@stripe/react-stripe-js';
+import { PaymentElement,CardElement,useElements, useStripe, Elements } from '@stripe/react-stripe-js';
 import axios from './axios';
+import CheckoutForm from './PaymentPortalForm';
+
 // import { Checkbox } from '@mui/material';
 // import Subtotal from './Subtotal';
 
-function Payment() {
+function Payment({promise}) {
 
+  
+  console.log("NEXT RENDER ---------------")
+  console.log(promise);
 
-    const [{user,userAddress,basket,checkbox},dispatch]=useStateValue();
+    const [{user,userAddress,userEmail,basket,checkbox},dispatch]=useStateValue();
+    basket.map(item=>{
+        console.log("ids in the basket",item.id);
+    }) 
+    
+    console.log("this is userEmail>>",userEmail );
     const history=useHistory();
-
+ 
     const stripe=useStripe();
     const elements=useElements();
 
@@ -27,22 +37,29 @@ function Payment() {
 
   
     const [clientSecret,setClientSecret]=useState(true);
+    console.log("firsttime>>>",clientSecret);
+    // const [clientSecretV, setClientSecretV] = useState("");
+    const total=getBasketTotal(basket,!checkbox)*100;
 
     useEffect(()=>{
       const getClientSecret=async () =>{
         const res=await axios ({
           method:'post',
-          url:`/payments/create?total=${getBasketTotal(basket,!checkbox)*100}`
+          url:`/payments/create?total=${total}`
         })
 
         setClientSecret(res.data.clientSecret)
-      }
+        console.log(clientSecret);
+        // setClientSecretV(res.data.clientSecret);
+        // console.log(clientSecretV);
+      } 
       getClientSecret();
     },[basket]); //client secret changed whenever there's a change in the basket 
  
 
     async function handlePayment(e){
       e.preventDefault();
+      
       setProcessing(true); //to update payment processing is true
 
       const payload=await stripe.confirmCardPayment(clientSecret,{
@@ -55,16 +72,18 @@ function Payment() {
         setSucceeded(true); //transaction succeeded
         setError(null);//there's no error
         setProcessing(false);//processing is finished
-        // db.
-        //   collection('users')
-        //   .doc(user?.uid)
-        //   .collection('orders')
-        //   .doc(paymentIntent.id)
-        //   .set({
-        //     basket:basket,
-        //     amount:clientSecret.amount,
-        //     created:paymentIntent.created
-        //   })
+        
+        var orderId =""
+        axios.post('/order_placing',{userEmail,total:total})
+        .then((response)=>{
+          orderId=response.data[0]
+          console.log("This is OrderID",orderId);
+          {basket.map(item=>(
+            axios.post('/order_items_placing',{orderId:orderId,id:item.id})
+           
+           ))}
+        })         
+ 
         dispatch({
           type: 'add_to_order',
           payload:{basket:basket,price:getBasketTotal(basket,!checkbox)}
@@ -72,6 +91,7 @@ function Payment() {
         dispatch({
           type:"empty_basket"
         })
+        
 
         history.replace('/OrdersHistory')
         }
@@ -125,7 +145,7 @@ function Payment() {
                 image={item.image}
                 price={item.price}
                 rating={item.rating}
-                />
+                /> 
             ))}
         </div>
       </div>
@@ -138,6 +158,11 @@ function Payment() {
             <h5>Choose a payment method</h5>
               <form onSubmit={handlePayment}>
                 <CardElement onChange={handleChange}/>
+                {/* {clientSecret && promise && (
+        <Elements stripe={promise} options={{ clientSecret }}>
+          <CheckoutForm />
+        </Elements>
+      )} */}
                 
                 <div className='payment_price'>
                 <CurrencyFormat 
