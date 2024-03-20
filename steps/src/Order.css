@@ -1,7 +1,6 @@
 .Order{
-    margin-left: 20px;
-    margin-right: 20px;
-    max-width: fit-content;
+    margin: 20px auto;
+    width: 60%;
     border: 2px solid black;
 }
 
@@ -9,6 +8,7 @@
     display: flex;
     justify-content:space-around;
     border: none;
+    padding: 5px;
     background-color: gainsboro;
 }
 
@@ -16,6 +16,14 @@
     color: green;
 }
 
+.container {
+    width: 100%;
+}
 .order_container{
     padding-right: 5px;
+}
+
+.order-date {
+    display: flex;
+    gap: 5px;
 }

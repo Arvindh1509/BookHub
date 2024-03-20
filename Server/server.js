@@ -34,7 +34,7 @@ app.get('/books', async (req, res) => {
 
 app.post('/ordersHistory',async(req,res)=>{
   try {
-    Email=req.body.userEmail;
+    let Email=req.body.userEmail;
 
     const connection = await OracleDB.getConnection(dbConfig);
     let orderid={};
@@ -46,6 +46,8 @@ app.post('/ordersHistory',async(req,res)=>{
     // console.log(cart.rows);
     
     var orderisbns = {};
+    // var total={};
+    // var dates={};
     for (const orderIdArr of Object.values(orderid)) {
       const orderId = orderIdArr;
       console.log("inside isbns------------->", orderId);
@@ -57,8 +59,14 @@ app.post('/ordersHistory',async(req,res)=>{
                      WHERE O.ORDER_ID = :orderid)`, { orderid: orderId });
                      console.log(ans.rows);
       orderisbns[`${orderId}`] = ans.rows;
+
+
+      // const date=await connection.execute(`SELECT TOTAL_AMOUNT FROM ORDERS WHERE EMAIL=:email AND ORDER_ID=:orderid `,{email:Email,orderid:orderId})
+      // dates[]
     }
     // console.log(orderisbns);
+
+    
 
 
        

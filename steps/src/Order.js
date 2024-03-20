@@ -5,8 +5,8 @@ import CurrencyFormat from 'react-currency-format';
 import { getBasketTotal } from './Reducer';
 import './Order.css';
 
-function Order() {
-    const [{order,checkbox,user,price}]=useStateValue();
+function Order({id,title,image,price,rating}) {
+    const [{order,checkbox,user,userEmail}]=useStateValue();
     const today = new Date();
   
   const day = today.getDate();
@@ -30,7 +30,7 @@ function Order() {
                        </div>
                     )}
                     decimalScale={2}
-                    value={price} 
+                    value={0} 
                     displayType={'text'}
                     thousandSeparator={true}
                     prefix='₹'
@@ -43,17 +43,17 @@ function Order() {
       
       <div className='order_container'>
       {/* {console.log("ORDER IS >>>",order[0][0].price)} */}
-      {order.map(item => (
+      
     <CheckoutBook
-        key={item.id} // Assuming you need a key prop for each item in a list
-        id={item.id}
-        title={item.title}
-        image={item.image}
-        price={item.price}
-        rating={item.rating} 
+        key={id} // Assuming you need a key prop for each item in a list
+        id={id}
+        title={title}
+        image={image}
+        price={price}
+        rating={rating} 
         hidebutton ={false}
     />
-))}
+
       </div>
       
     </div>
