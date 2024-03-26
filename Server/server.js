@@ -58,7 +58,7 @@ app.post('/ordersHistory',async(req,res)=>{
                      JOIN ORDER_ITEMS P ON O.ORDER_ID = P.ORDER_ID 
                      WHERE O.ORDER_ID = :orderid)`, { orderid: orderId });
                      console.log(ans.rows);
-      orderisbns[`${orderId}`] = ans.rows;
+      orderisbns[`${orderId}`] = ans.rows; 
 
 
       // const date=await connection.execute(`SELECT TOTAL_AMOUNT FROM ORDERS WHERE EMAIL=:email AND ORDER_ID=:orderid `,{email:Email,orderid:orderId})
