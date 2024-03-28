@@ -1,0 +1,19 @@
+.green-background {
+    background-color: #316619;
+    color: white;
+  }
+  
+  .red-background {
+    background-color: #FD0E0E;
+    color: white;
+  }
+
+.green-background:hover {
+    background-color: #316619;
+    color:white;
+}
+
+.red-background:hover{
+    background-color: #FD0E0E;
+    color:white;
+}

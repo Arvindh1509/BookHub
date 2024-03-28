@@ -7,6 +7,7 @@ import Dashboard from "./scenes/dashboard/index"
 import Login from "./components/Login";
 import Products from "./scenes/Products";
 import Orders from "./scenes/orders";
+import Transactions from "./scenes/Transactions";
 function App() {
   return (
     <div className="app">
@@ -18,6 +19,7 @@ function App() {
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path='/books' element={<Products />} />
               <Route path="/orders" element={<Orders/>}/>
+              <Route path="/transactions" element={<Transactions/>}/>   
             </Route>
             <Route path='/login' element={<Login />} />
             

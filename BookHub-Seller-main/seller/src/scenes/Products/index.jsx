@@ -17,11 +17,11 @@ const Product=({isbn,title,author,price,rating,quantity})=>{
         <CardContent>
         <Box sx={{backgroundColor:'white', borderRadius:'9px'}}>
           <Typography
-            sx={{ fontSize: 10 }}
+            sx={{ fontSize: 10, }}
             color='Black'
             gutterBottom
           >
-            {"category"}
+            {"Thriller"}
           </Typography>
           </Box>
           <Typography fontSize={15} color='white' component="div">
@@ -43,7 +43,7 @@ const Product=({isbn,title,author,price,rating,quantity})=>{
             size="small"
             onClick={() => setIsExpanded(!isExpanded)}
           >
-            See More
+            {isExpanded ? 'See Less': 'See More'}
           </Button>
         </CardActions>
         <Collapse
@@ -98,20 +98,68 @@ function Products() {
             "& > div": { gridColumn:undefined  },
           }}
         >
-       {books.length>0 &&
+       {/* {books.length>0 &&
        books.map((record)=>(
-        <Product
-           key={record[0]}
-            isbn={record[0]}
-            title={record[1]}
-            author={record[2]}
-            image={record[3]}
-            price={record[4]}
-            rating={record[5]}
-            quantity={record[6]}
+        // <Product
+        //    key={record[0]}
+        //     isbn={record[0]}
+        //     title={record[1]}
+        //     author={record[2]}
+        //     image={record[3]}
+        //     price={record[4]}
+        //     rating={record[5]}
+        //     quantity={record[6]}
 
+        // />
+       ))} */}
+       <Product 
+          isbn={'12345678990123'}
+          title={'James Bond'}
+          author={'Ian Flemming'}
+          price={'200'}
+          rating={5}
+          quantity={10}
         />
-       ))}
+        <Product 
+          isbn={'12345678990123'}
+          title={'James Bond'}
+          author={'Ian Flemming'}
+          price={'200'}
+          rating={5}
+          quantity={10}
+        />
+        <Product 
+          isbn={'12345678990123'}
+          title={'James Bond'}
+          author={'Ian Flemming'}
+          price={'200'}
+          rating={5}
+          quantity={10}
+        />
+        <Product 
+          isbn={'12345678990123'}
+          title={'James Bond'}
+          author={'Ian Flemming'}
+          price={'200'}
+          rating={5}
+          quantity={10}
+        />
+        <Product 
+          isbn={'12345678990123'}
+          title={'James Bond'}
+          author={'Ian Flemming'}
+          price={'200'}
+          rating={5}
+          quantity={10}
+        />
+        <Product 
+          isbn={'12345678990123'}
+          title={'James Bond'}
+          author={'Ian Flemming'}
+          price={'200'}
+          rating={5}
+          quantity={10}
+        />
           
           
         </Box>
