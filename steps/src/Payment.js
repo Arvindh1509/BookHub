@@ -19,11 +19,11 @@ function Payment({promise}) {
   console.log(promise);
 
     const [{user,userAddress,userEmail,basket,checkbox},dispatch]=useStateValue();
-    basket.map(item=>{
-        console.log("ids in the basket",item.id);
-    }) 
+    // basket.map(item=>{
+    //     console.log("ids in the basket",item.id);
+    // }) 
     
-    console.log("this is userEmail>>",userEmail );
+    // console.log("this is userEmail>>",userEmail );
     const history=useHistory();
  
     const stripe=useStripe();

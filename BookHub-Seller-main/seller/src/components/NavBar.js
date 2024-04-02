@@ -10,17 +10,19 @@ import {
   Button,
   IconButton, 
   InputBase, 
-  Menu, 
-  MenuItem, 
   Toolbar,
   Typography,
 } from "@mui/material";
 import FlexBetween from "./FlexBetween";
+import { useStateValue } from "../StateProvider";
+import { useNavigate } from "react-router-dom";
 
-const Navbar = ({ user, isSidebarOpen, setIsSidebarOpen }) => {
+const Navbar = ({isSidebarOpen, setIsSidebarOpen }) => {
 
   const [anchorEl,setAnchorEl]=useState(null);
   const isOpen=Boolean(anchorEl)
+  const[{user},dispatch]=useStateValue();
+  const navigate=useNavigate();
   
   function handleClick(e){
     return setAnchorEl(e.currentTarget);
@@ -28,7 +30,11 @@ const Navbar = ({ user, isSidebarOpen, setIsSidebarOpen }) => {
   }
 
   function handleClose(e){
-    return setAnchorEl(null)
+    dispatch({
+      type:'logoutSeller'
+    })
+    navigate("/loginSeller")
+    console.log(e);
   }
 
 
@@ -84,9 +90,7 @@ const Navbar = ({ user, isSidebarOpen, setIsSidebarOpen }) => {
 
                   <ArrowDropDownOutlined sx={{color:'white', fontSize:'25px'}}/>
           </Button>
-          <Menu anchorEl={anchorEl} open={isOpen} onClose={handleClose} anchorOrigin={{vertical:'bottom', horizontal:'center'}}>
-            <MenuItem onCLick={handleClose}>Log out</MenuItem>
-          </Menu>
+          <Button onClick={handleClose} sx={{color:'black', backgroundColor:'white'}}>Log Out</Button>
         </FlexBetween>
 
           </FlexBetween>

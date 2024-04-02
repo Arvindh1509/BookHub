@@ -2,23 +2,15 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
 import App from "./App";
-import { configureStore } from "@reduxjs/toolkit";
-import globalReducer from "./State/index";
-import { Provider } from "react-redux";
-import { setupListeners } from "@reduxjs/toolkit/query";
-const store = configureStore({
-  reducer: {
-    global: globalReducer,
-  },
-  
-});
-setupListeners(store.dispatch);
+import { Stateprovider } from './StateProvider';
+import reducer, { initialState } from './Reducer';
 
-const root = ReactDOM.createRoot(document.getElementById("root"));
+
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <React.StrictMode>
-    <Provider store={store}>
-      <App />
-    </Provider>
-  </React.StrictMode>
+  
+  <Stateprovider initialState={initialState} reducer={reducer}>   
+   <App/>
+</Stateprovider>
 );

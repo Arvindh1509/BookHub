@@ -5,6 +5,7 @@ import {  ChevronLeft,  ChevronRightOutlined,  HomeOutlined,  ShoppingCartOutlin
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import FlexBetween from "./FlexBetween";
+import { useStateValue } from "../StateProvider";
 
 const navItems = [
   {
@@ -37,7 +38,6 @@ const navItems = [
 ];
 
 const Sidebar = ({
-  user,
   drawerWidth,
   isSidebarOpen,
   setIsSidebarOpen,
@@ -45,6 +45,7 @@ const Sidebar = ({
   const { pathname } = useLocation();
   const [active, setActive] = useState("");
   const navigate = useNavigate();
+  const [{user}]=useStateValue();
 
   useEffect(() => {
     setActive(pathname.substring(1));
@@ -88,7 +89,7 @@ const Sidebar = ({
             <List>
               {navItems.map(({ text, icon }) => {
                
-                const lcText = text.toLowerCase();
+                const lcText =(text==='Add a Book')?'addabook':text.toLowerCase();
 
                 return (
                   <ListItem key={text} disablePadding>

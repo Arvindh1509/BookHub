@@ -11,14 +11,12 @@ const Layout = () => {
   return (
     <Box display='flex' width="100%" height="100%">
       <Sidebar
-      user="Arvindh"  //DB
         drawerWidth="250px"
         isSidebarOpen={isSidebarOpen}
         setIsSidebarOpen={setIsSidebarOpen}
       />
       <Box flexGrow={1}>
         <Navbar
-          user="Arvindh"
           isSidebarOpen={isSidebarOpen}
           setIsSidebarOpen={setIsSidebarOpen}
         />

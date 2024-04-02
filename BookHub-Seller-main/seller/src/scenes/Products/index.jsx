@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react'
 import axios from '../../axios';
 
 import Header from '../../components/Header'
+import { useStateValue } from '../../StateProvider';
 
 const Product=({isbn,title,author,price,rating,quantity})=>{
   const [isExpanded,setIsExpanded]=useState(false)
@@ -68,21 +69,25 @@ const Product=({isbn,title,author,price,rating,quantity})=>{
 function Products() {
 
   const [books,setBooks]=useState([]);
+  const [{userEmail},dispatch]=useStateValue();
  
   useEffect(()=>{
     fetchBooks();
   },[]);
  
   function fetchBooks() {
-    axios.get('/books')
+    axios.post('/books_seller',{userEmail})
       .then(response => {
-        setBooks(response.data); // Update the state with the received data
+        setBooks(response.data);
+        dispatch({
+          type:'addbooks',
+          books:books
+        }) // Update the state with the received data
       })
       .catch(error => {
         console.error('Error fetching books:', error);
       });
   }
-  
 
   return (
     <Box m="1.5rem 2.5rem">
@@ -98,21 +103,21 @@ function Products() {
             "& > div": { gridColumn:undefined  },
           }}
         >
-       {/* {books.length>0 &&
+       {books.length>0 &&
        books.map((record)=>(
-        // <Product
-        //    key={record[0]}
-        //     isbn={record[0]}
-        //     title={record[1]}
-        //     author={record[2]}
-        //     image={record[3]}
-        //     price={record[4]}
-        //     rating={record[5]}
-        //     quantity={record[6]}
+        <Product
+           key={record[0]}
+            isbn={record[0]}
+            title={record[1]}
+            author={record[2]}
+            image={record[3]}
+            price={record[4]}
+            rating={record[5]}
+            quantity={record[6]}
 
-        // />
-       ))} */}
-       <Product 
+        />
+       ))}
+       {/* <Product 
           isbn={'12345678990123'}
           title={'James Bond'}
           author={'Ian Flemming'}
@@ -159,7 +164,7 @@ function Products() {
           price={'200'}
           rating={5}
           quantity={10}
-        />
+        /> */}
           
           
         </Box>

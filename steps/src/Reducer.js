@@ -54,7 +54,7 @@ function reducer(state,action){
                 price:0
             }
 
-        case 'add_to_basket':
+        case 'add_to_basket': //from book.js and book_seperate.js
             return {
                 ...state,
                 basket:[...state.basket,action.item]
@@ -73,7 +73,7 @@ function reducer(state,action){
                 checkbox:action.checkbox
             }
         
-        case 'viewBook':
+        case 'viewBook': // from book.js
                 return{
                     ...state,
                     viewedBook:action.item

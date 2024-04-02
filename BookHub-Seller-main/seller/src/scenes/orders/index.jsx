@@ -1,64 +1,72 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Header from '../../components/Header'
 import { Box, colors } from '@mui/material'
 import { DataGrid } from '@mui/x-data-grid';
 import './index.css'
+import axios from '../../axios';
+import { useStateValue } from '../../StateProvider';
 
 const columns = [
-    { field: 'id', headerName: 'ID', width: 90 },
+  {field:'id',headerName:'ID',width:90},
+    { 
+      field: 'order_id',
+      headerName: 'Order ID', 
+      width: 90 
+    },
     {
-      field: 'firstName',
-      headerName: 'First name',
+      field: 'order_date',
+      headerName: 'Date',
       width: 150,
       editable: false,
     },
     {
-      field: 'lastName',
-      headerName: 'Last name',
+      field: 'email',
+      headerName: 'Buyer',
       width: 150,
       editable: false,
     },
     {
-      field: 'age',
-      headerName: 'Age',
-      type: 'number',
-      width: 110,
-      editable: false,
-    },
-    {
-      field: 'fullName',
-      headerName: 'Full name',
-      description: 'This column has a value getter and is not sortable.',
-      sortable: false,
-      width: 160,
-      valueGetter: (value, row) => `${row.firstName || ''} ${row.lastName || ''}`,
-    },
-    {
-      field: 'dispatched',
+      field: 'order_status',
       headerName: 'Status',
       width: 150,
       editable: false,
     }
   ];
   
-  const rows = [
-    { id: 1, lastName: 'Snow', firstName: 'Jon', age: 14,dispatched:'Dispatched' },
-    { id: 2, lastName: 'Lannister', firstName: 'Cersei', age: 31,dispatched:'Pending' },
-    { id: 3, lastName: 'Lannister', firstName: 'Jaime', age: 31,dispatched:'Dispatched' },
-    { id: 4, lastName: 'Stark', firstName: 'Arya', age: 11,dispatched:'Pending' },
-    { id: 5, lastName: 'Targaryen', firstName: 'Daenerys', age: null,dispatched:'Dispatched' },
-    { id: 6, lastName: 'Melisandre', firstName: null, age: 150,dispatched:'Pending' },
-    { id: 7, lastName: 'Clifford', firstName: 'Ferrara', age: 44,dispatched:'Dispatched' },
-    { id: 8, lastName: 'Frances', firstName: 'Rossini', age: 36,dispatched:'Pending' },
-    { id: 9, lastName: 'Roxie', firstName: 'Harvey', age: 65,dispatched:'Dispatched' },
-  ];
 
 function Orders() {
 
-  const getRowClassName = (params) => {
-    return params.row.dispatched === 'Dispatched' ? 'green-background' : 'red-background';
-};
+const [orders,setOrders]=useState([]);
+const [{userEmail}]=useStateValue();
+ 
+useEffect(()=>{
+  fetchOrders();
+},[]);
 
+function fetchOrders() {
+  axios.post('/orderSeller',{userEmail})
+    .then(response => {
+      setOrders(response.data); //   the state with the received data
+    })
+    .catch(error => {
+      console.error('Error fetching books:', error);
+    });
+}
+console.log(orders);
+const rows = orders.map((item, index) => ({
+  id: index + 1,
+  order_id: item[0],
+  order_date: item[1],
+  email: item[3],
+  order_status: item[2]
+}));
+
+const getRowClassName = (params) => {
+  if(params.row.order_status==='dispatched') return 'green-background' 
+  else if(params.row.order_status==='DISPATCHED') return 'green-background'
+  else return 'red-background'
+  // return params.row.order_status === ('dispatched'||'DISPATCHED') ? 'green-background' : 'red-background';
+};
   return (
     <Box m='1.5rem 2.5rem'>
         <Header title='Orders'/>
@@ -82,9 +90,9 @@ function Orders() {
 
           },
           "& .MuiDataGrid-footerContainer": {
-            backgroundColor:'red',
-            color:'white',
-            borderTop: "none",
+            backgroundColor:'transaparent',
+            color:'black',
+            border: "1px solid gray",
           },
           "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
             color: 'white',
