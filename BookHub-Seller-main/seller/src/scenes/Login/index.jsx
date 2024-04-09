@@ -24,7 +24,8 @@ function LoginSeller() {
                 type:'loginSeller', 
                 user:data.data.userName,
                 userAddress:data.data.userAddress,
-                userEmail:data.data.userEmail
+                userEmail:data.data.userEmail,
+                userContact:data.data.userContact
             });
          navigate("/dashboard");
         //    return <Navigate to='/' replace={true}/>;

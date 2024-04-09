@@ -4,9 +4,10 @@
   import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
   import { Link,useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 import { useStateValue } from './Stateprovider';
+import { useState } from 'react';
   
-  function Header() {
-
+  function Header({searchChange}) {
+    const [searchValue,setSearchValue] =useState('');
     const [{basket,user},dispatch]=useStateValue();
     const history=useHistory();
 
@@ -28,11 +29,16 @@ import { useStateValue } from './Stateprovider';
 
     return (
       <div className='Header'>
-      <Link to='/'>
-        <img className='header_logo' src='https://allsaintsvaschool.org/wp-content/uploads/2020/08/BookHub-logo.jpg'/>
-        </Link>
+        <img className='header_logo' src='https://allsaintsvaschool.org/wp-content/uploads/2020/08/BookHub-logo.jpg' onClick={()=>{searchValue?searchChange(''):history.push('/')
+        setSearchValue('')}}/>
         <div className='searchContainer'>
-            <input className='searchBox' type='text'></input>
+        <form onSubmit={(e)=>{
+        e.preventDefault();
+        console.log(searchValue)
+        searchChange(searchValue)
+        }}>
+            <input className='searchBox' value={searchValue} type='text' onChange={(e)=>setSearchValue(e.target.value)}></input>
+        </form>
             <SearchIcon className='search_icon'/>
         </div>
         <div className='header_nav'>

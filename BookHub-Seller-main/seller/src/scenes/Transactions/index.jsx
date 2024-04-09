@@ -64,10 +64,10 @@ console.log(transactions);
 const rows = transactions.map((item, index) => ({
   id: index + 1,
   firstName: item[0],
-  ordernumber: item[1],
-  amount: item[2],
+  ordernumber: item[3],
+  amount: item[1]?item[1]:item[2],
   mode:'Card',
-  status: (item[4]==='DISPATCHED'||'dispatched')?'Completed':'Incomplete'
+  status: (item[5]==='DISPATCHED'||'dispatched')?'Completed':'Incomplete'
 }));
 const getRowClassName = (params) => {
 return 'green-background'

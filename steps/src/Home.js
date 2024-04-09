@@ -4,25 +4,35 @@ import top_image from './images/Top_image_website.jpg';
 import Book from './Book';
 import axios from './axios';
 
-function Home() {
+function Home({search1}) {
 
   const [books,setBooks]=useState([]);
-
+  const [backup,setBackup]=useState([]);
+console.log(search1);
   useEffect(()=>{
     fetchBooks();
   },[]);
- 
+  
+  useEffect(()=>{
+    if(search1==""){
+      setBooks(backup)
+    }else{
+    let arr = books.filter((data)=>data[1].includes(search1));
+    setBooks(arr);
+    }
+  },[search1])
   function fetchBooks() {
     axios.get('/books')
       .then(response => {
         setBooks(response.data); // Update the state with the received data
+        setBackup(response.data)
       })
       .catch(error => {
         console.error('Error fetching books:', error);
       });
   }
 
-  const description="Internationally bestselling author Anthony Horowitz’s third James Bond novel, after Forever and a Day.It is M's funeral. One man is missing from the graveside: the traitor who pulled the trigger and who is now in custody, accused of M's murder—James Bond.  Behind the Iron Curtain, a group of former Smersh agents want to use the British spy in an operation that will change the balance of world power. Bond is smuggled into the lion's den—but whose orders is he following, and will he obey them when the moment of truth arrives? In a mission where treachery is all around and one false move means death, Bond must grapple with the darkest questions about himself. But not even he knows what has happened to the man he used to be.";
+   const default_description="Internationally bestselling author Anthony Horowitz’s third James Bond novel, after Forever and a Day.It is M's funeral. One man is missing from the graveside: the traitor who pulled the trigger and who is now in custody, accused of M's murder—James Bond.  Behind the Iron Curtain, a group of former Smersh agents want to use the British spy in an operation that will change the balance of world power. Bond is smuggled into the lion's den—but whose orders is he following, and will he obey them when the moment of truth arrives? In a mission where treachery is all around and one false move means death, Bond must grapple with the darkest questions about himself. But not even he knows what has happened to the man he used to be.";
 
 // console.log("Books:",books)
 
@@ -34,7 +44,7 @@ function Home() {
       <div className='product_row'>
         {/* <book></book> */}
 {/* {console.log(books.length)} */}
-{books.length>0 && 
+{books.length>0 ?
 books.map((record,index)=> 
 
       (
@@ -47,10 +57,14 @@ books.map((record,index)=>
       price={record[4]}
       rating={record[5]}
       quantity={record[6]}
-      description={description}
+      category={record[7]}
+      seller={record[8]}
+      description={record[9]?record[9]:default_description}
 />  
 
-    ))}
+    )):<div>
+      <h1>No results</h1>
+    </div>}
 
     
 {/* 

@@ -11,6 +11,7 @@ import Transactions from "./scenes/Transactions";
 import Add_a_book from "./scenes/Add_a_Book";
 import LoginSeller from "./scenes/Login";
 import RegisterSeller from "./scenes/Register";
+import Your_Profile from "./scenes/Your_Profile";
 function App() {
 
   // const navigate=useNavigate();
@@ -29,10 +30,9 @@ function App() {
               <Route path="/addabook" element={<Add_a_book/>}/>
               <Route path='/books' element={<Products />} />
               <Route path="/orders" element={<Orders/>}/>
-              <Route path="/transactions" element={<Transactions/>}/>   
+              <Route path="/transactions" element={<Transactions/>}/>  
+              <Route path='/your profile' element={<Your_Profile/>}/> 
             </Route>
-            <Route path='/login' element={<Login />} />
-            
           </Routes>
       </BrowserRouter>
     </div>

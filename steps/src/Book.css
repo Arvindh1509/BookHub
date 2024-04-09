@@ -49,3 +49,7 @@
 .book_quantity_out>h4{
     color: red;
 }
+
+.add_to_cart{
+    cursor: pointer;
+}

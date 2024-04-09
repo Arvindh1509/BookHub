@@ -4,7 +4,7 @@ import { useStateValue } from './Stateprovider';
 import { Link } from 'react-router-dom/cjs/react-router-dom.min';
 import StarIcon from '@mui/icons-material/Star';
 
-function Book({id,title,author,image,price,rating,quantity,description}) {
+function Book({id,title,author,image,price,rating,quantity,category,seller,description}) {
 
   const [{basket},dispatch] = useStateValue();
 
@@ -20,6 +20,7 @@ function Book({id,title,author,image,price,rating,quantity,description}) {
         rating:rating,
         image:image,
         description:description
+      
       }
     })
 
@@ -35,7 +36,10 @@ function Book({id,title,author,image,price,rating,quantity,description}) {
         price:price,
         rating:rating,
         image:image,
-        description:description
+        category:category,
+        seller:seller,
+        description:description,
+        quantity:quantity
       }
     })
   }
@@ -66,8 +70,8 @@ function Book({id,title,author,image,price,rating,quantity,description}) {
         <Link to='/Book_seperate'>
           <img className='book_img' src={image} onClick={viewBook}/>
           </Link>
-
-        <button onClick={addtobasket}>Add to Cart</button>
+              {quantity>=1?<button className="add_to_cart" onClick={addtobasket}>Add to Cart</button>:""}
+        
        
     </div>
   )

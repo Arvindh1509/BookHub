@@ -38,7 +38,7 @@ function Payment({promise}) {
   
     const [clientSecret,setClientSecret]=useState(true);
     console.log("firsttime>>>",clientSecret);
-    // const [clientSecretV, setClientSecretV] = useState("");
+    
     const total=getBasketTotal(basket,!checkbox)*100;
 
     useEffect(()=>{
@@ -50,8 +50,7 @@ function Payment({promise}) {
 
         setClientSecret(res.data.clientSecret)
         console.log(clientSecret);
-        // setClientSecretV(res.data.clientSecret);
-        // console.log(clientSecretV);
+       
       } 
       getClientSecret();
     },[basket]); //client secret changed whenever there's a change in the basket 
@@ -74,12 +73,12 @@ function Payment({promise}) {
         setProcessing(false);//processing is finished
         
         var orderId =""
-        axios.post('/order_placing',{userEmail,total:total})
+        axios.post('/order_placing',{userEmail,total:(total),gift:checkbox})
         .then((response)=>{
           orderId=response.data[0]
           console.log("This is OrderID",orderId);
           {basket.map(item=>(
-            axios.post('/order_items_placing',{orderId:orderId,id:item.id})
+            axios.post('/order_items_placing',{orderId:orderId,id:item.id,quantity:item.quantity,price:(item.quantity)?item.price*item.quantity:item.price})
            
            ))}
         })         

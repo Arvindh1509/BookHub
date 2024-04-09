@@ -1,28 +1,51 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import FlexBetween from '../../components/FlexBetween';
 import Header from '../../components/Header';
-import { Box, Button } from '@mui/material';
+import { Box } from '@mui/material';
 import Statbox from '../../components/Statbox';
 import { useStateValue } from '../../StateProvider';
 import { Navigate } from 'react-router-dom';
+import axios from '../../axios'
 
 function Dashboard() {
   
-  const [{user,books}] =useStateValue();
+  const [{user,userEmail}] =useStateValue();
+  const [closedOrders,setClosedorders]=useState();
+  const [openOrders,setOpenorders]=useState();
+  const [totalOrders,setTotalOrders]=useState();
+
+  useEffect(()=>{
+    fetchInfo();
+  },[])
+
+
+
+  function fetchInfo(){
+    axios.post('/dashboard_Seller',{userEmail})
+    .then((data)=>{
+      setClosedorders(data.data.closedOrders.rows[0][0]);
+      setOpenorders(data.data.openOrders.rows[0][0]);
+      setTotalOrders(data.data.total_books.rows[0][0]);
+      
+    })
+    .catch((error)=>{
+      console.log(error);
+    })
+  }
 
   console.log(user);
 
   return (user?<Box m="1.5rem 2.5rem">
     <FlexBetween >
-        <Header title="Welcome Arvindh, Dashboard"/>
+        <Header title={`Welcome ${user}, Your Dashboard`}/>
     </FlexBetween>
     <Box mt="20px" display={"flex"}
     gap="20px"
    
     >
-      <Statbox title={"Total Books"} value={20}/>
-      <Statbox title={"Open Orders"} value={10}/>
-      <Statbox title={"Closed Orders"} value={5}/> 
+      <Statbox title={"Total Books"} value={totalOrders}/>
+      <Statbox title={"Open Orders"} value={openOrders}/>
+      <Statbox title={"Closed Orders"} value={closedOrders}/> 
     </Box> 
   </Box>:<Navigate to={'/loginSeller'} replace={true}/>)
 

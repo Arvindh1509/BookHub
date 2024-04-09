@@ -4,8 +4,8 @@ import { useStateValue } from './Stateprovider'
 import StarIcon from '@mui/icons-material/Star';
 import { Link } from 'react-router-dom/cjs/react-router-dom.min';
 
-function CheckoutBook({id,title,image,price,rating,description,hidebutton}) {
-const[{basket},dispatch]=useStateValue();
+function CheckoutBook({id,title,image,price,rating,description,hidebutton,quantity,category,seller}) {
+const[{viewedBook,basket},dispatch]=useStateValue();
     function removefromCart(){
         (dispatch({
             type:'remove_item',
@@ -17,12 +17,16 @@ const[{basket},dispatch]=useStateValue();
       dispatch({
         type:'viewBook',
         item:{
+          key:id,
           id:id,
           title,
           price:price,
           rating:rating,
           image:image,
-          description:description
+          category:category,
+          seller:seller,
+          description:description,
+          quantity:quantity
         }
       })
     }
@@ -32,6 +36,7 @@ const[{basket},dispatch]=useStateValue();
     {/* {console.log("inside checoutbookpage>>",image,title,price,rating)} */}
     <Link to='/Book_seperate'>
      <img className='checkout_book_img' src={image} onClick={viewbook}/>
+     {console.log(viewedBook)}
 </Link>
      <div className='checkout_book_info'>
         <p className='checkout_book_title '>{title}</p>
@@ -43,6 +48,7 @@ const[{basket},dispatch]=useStateValue();
         <p className='checkout_book_price'>
             <small>Rs </small>
             <strong>{price}</strong>
+            <h4>Quantity: {quantity}</h4>
         </p>
         {
           hidebutton && (

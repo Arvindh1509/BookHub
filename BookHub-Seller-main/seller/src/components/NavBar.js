@@ -88,7 +88,7 @@ const Navbar = ({isSidebarOpen, setIsSidebarOpen }) => {
                     {user}
                   </Typography>
 
-                  <ArrowDropDownOutlined sx={{color:'white', fontSize:'25px'}}/>
+                  {/* <ArrowDropDownOutlined sx={{color:'white', fontSize:'25px'}}/> */}
           </Button>
           <Button onClick={handleClose} sx={{color:'black', backgroundColor:'white'}}>Log Out</Button>
         </FlexBetween>

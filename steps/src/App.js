@@ -12,10 +12,21 @@ import AdBanners from './AdBanners';
 import Payment from './Payment';
 import {loadStripe} from "@stripe/stripe-js"
 import {Elements } from "@stripe/react-stripe-js"
+import Payment_direct from './Payment_direct';
+import { useState } from 'react';
 
 const promise=loadStripe('pk_test_51Os1YBSGWWLum80t1jDc4VyVDFG3mT5kPSfzZeWaOktoIisebvL1BORdBFlifXjzauFxtOqMLBk2x98iiaYzm282003Plbj1uo')
 
+
 function App() {
+
+  const [search1,setSearch]=useState("");
+  const searchChange=(searchInput)=>{
+    // e.prevantDefault();
+    console.log(searchInput);
+    setSearch(searchInput); 
+    console.log(search1);
+  }
 
   return (
     <Router>
@@ -41,7 +52,9 @@ function App() {
           <Route path='/register' >
             <Register />       
           </Route>
-
+          <Route path='/sample'>
+            <Payment_direct/>
+          </Route>
           {/* used for login.js and if wantto register
            navigates to register.js */}
           <Route path='/login' component={Login}/>
@@ -63,8 +76,8 @@ function App() {
 
           {/* main page */}
           <Route path='/'>
-            <Header/>
-            <Home/>
+            <Header searchChange={searchChange} />
+            <Home search1={search1} />
           </Route>
 
           {/* to be done */}

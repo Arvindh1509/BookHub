@@ -60,12 +60,16 @@
     margin-top: 10px;
     color: white;
     font-weight: 650;
+    cursor: pointer;
+
 }
 
 .login_register{
     background-color: whitesmoke;
     border-radius: 5px;
     width: 100%;
+    cursor: pointer;
+
     height: 40px;
     border: 1px solid;
     margin-top: 10px;

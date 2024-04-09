@@ -12,6 +12,7 @@
     width: 220px;
     object-fit: contain;
     margin: 0 20px;
+    cursor: pointer;
     /* margin-top: 18px; */
 }
 
@@ -20,6 +21,11 @@
     flex: 1;
     align-items: center;
     border-radius: 200px;
+    /* justify-content: space-between; */
+}
+
+.searchContainer>form{
+    width: 100%;
 }
 
 .searchBox{
@@ -31,6 +37,7 @@
 }
 
 .search_icon{
+    margin-left: 20px;
     padding: 5px;
     height: 22px  !important;
     color: white;
@@ -52,7 +59,8 @@
     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
 
-.header_lineone{
+.header_lineone{    cursor: pointer;
+
     font-size: xx-small;
 }
 .header_linetwo_Seller{
@@ -61,7 +69,8 @@
 }
 
 .header_linetwo{
-    font-weight: 500;
+    font-weight: 500;    cursor: pointer;
+
 }
 
 .cart{

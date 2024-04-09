@@ -19,7 +19,7 @@ export const getBasketTotal  = (basket,checkbox) =>{
     console.log(additionalAmount);
     return (additionalAmount+basket?.reduce((amount, item) => {
    
-    return amount + item.price ;
+    return amount + (item.price*(item.quantity?item.quantity:1  )) ;
   }, 0))};
 
 //   export const getOrderTotal  = (order,checkbox) =>{ 
@@ -89,7 +89,7 @@ function reducer(state,action){
         case 'empty_basket':
                return {
                 ...state,
-                basket:[]
+                basket:[],
                 }
 
         case 'direct_order':

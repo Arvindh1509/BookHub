@@ -13,6 +13,7 @@ function Add_a_book() {
   const [description,setDescription]=useState('');
   const [price,setprice]=useState('');
   const [quantity,setQuantity]=useState('');
+  const [category,setCategory]=useState('');
 
   const[{user,userEmail}]=useStateValue();
 
@@ -20,8 +21,8 @@ function Add_a_book() {
 
   function handleEvent(e){
     e.preventDefault();
-    {if(isbn&&title&&img&&author&&description&&quantity&&price){
-    axios.post('/book_insert',{isbn,title,author,img,price,quantity,userEmail})
+    {if(isbn&&title&&img&&author&&description&&quantity&&price&&category){
+    axios.post('/book_insert',{isbn,title,author,img,price,quantity,userEmail,category,description})
     .then((data)=>{
       setIsbn('')
       setTitle('')
@@ -30,6 +31,7 @@ function Add_a_book() {
       setprice('')
       setDescription('')
       setQuantity('')
+      setCategory('')
       alert('Added Successfully') 
     //   history.push('/login');
     })
@@ -68,6 +70,10 @@ function Add_a_book() {
         {/* DESCRIPTION */}
         <h5>Description of the Book</h5>
         <input type='text' value={description} onChange={(e)=>{setDescription(e.target.value);}} className='register_form'/>
+
+        {/* CATEGORY */}
+        <h5>Category</h5>
+        <input type='text' value={category} onChange={(e)=>{setCategory(e.target.value);}} className='register_form'/>
 
         {/* PRICE */}
         <h5>Quoted Price </h5>

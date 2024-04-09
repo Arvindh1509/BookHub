@@ -15,6 +15,8 @@ function Checkout() {
         <h2 className='checkout_title'>
             Shopping Basket
         </h2>
+
+        {console.log(basket)}
  
 {basket.map(item => (
     <CheckoutBook
@@ -24,7 +26,11 @@ function Checkout() {
         image={item.image}
         price={item.price}
         rating={item.rating} 
+        description={item.description}
         hidebutton={true}
+        quantity={item.quantity}
+        category={item.category}
+        seller={item.seller}
     />
 ))}
 

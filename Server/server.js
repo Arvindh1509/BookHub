@@ -35,7 +35,7 @@ app.get('/books', async (req, res) => {
 
 app.post('/books_seller',async(req,res)=>{
   try {
-    console.log(req.body.userEmail);
+    // console.log(req.body.userEmail);
     const connection = await OracleDB.getConnection(dbConfig);
     const result = await connection.execute('SELECT * FROM Books where seller_email=:userEmail',{ userEmail: req.body.userEmail },{autoCommit:true});
 
@@ -55,38 +55,41 @@ app.post('/ordersHistory',async(req,res)=>{
 
     const connection = await OracleDB.getConnection(dbConfig);
     let orderid={};
-    const cart=await connection.execute(`SELECT ORDER_ID FROM ORDERS WHERE EMAIL=:email`,{Email});
+    let totalAmt={};
+    const cart=await connection.execute(`SELECT  ORDER_ID,total_amount FROM ORDERS WHERE EMAIL=:email
+    order by order_id desc`,{Email});
     for (const [index, row] of cart.rows.entries()) {
       orderid[`${index + 1}`] = row[0];
+      console.log(row[1]);
+      totalAmt[`${index + 1}`] = row[1];
     }
-    console.log("-------------->",orderid);
-    // console.log(cart.rows);
+   
     
     var orderisbns = {};
-    // var total={};
-    // var dates={};
+    
     for (const orderIdArr of Object.values(orderid)) {
       const orderId = orderIdArr;
-      console.log("inside isbns------------->", orderId);
+  
       const ans = await connection.execute(`SELECT * 
       FROM BOOKS 
       WHERE ISBN IN (SELECT P.ISBN 
                      FROM ORDERS O 
                      JOIN ORDER_ITEMS P ON O.ORDER_ID = P.ORDER_ID 
                      WHERE O.ORDER_ID = :orderid)`, { orderid: orderId });
-                     console.log(ans.rows);
+                  
       orderisbns[`${orderId}`] = ans.rows; 
 
+      
 
-      // const date=await connection.execute(`SELECT TOTAL_AMOUNT FROM ORDERS WHERE EMAIL=:email AND ORDER_ID=:orderid `,{email:Email,orderid:orderId})
-      // dates[]
+
+     
     }
-    // console.log(orderisbns);
+    
 
-    res.send({orderid,orderisbns});
+    res.send({orderid,orderisbns,totalAmt});
 
   } catch (error) {
-    console.log(error);
+    console.log(error); 
     res.send(error);
     
   }
@@ -119,15 +122,17 @@ app.post('/book_insert',async(req,res)=>{
       isbn:book_details.isbn,
       title:book_details.title,
       author:book_details.author,
-      imageurl:book_details.imageurl,
+      imageurl:book_details.img,
       price:book_details.price,
       quantity:book_details.quantity,
       rating:book_details.rating,
-      userEmail:book_details.userEmail
+      userEmail:book_details.userEmail,
+      category:book_details.category,
+      description:book_details.description
     };
 
-    const result=await connection.execute(`INSERT INTO BOOKS (ISBN,TITLE,AUTHOR,IMAGEURL,PRICE,RATING,QUANTITY,SELLER_EMAIL) VALUES(
-      :isbn,:title,:author,:imageurl,:price,:rating,:quantity,:userEmail) `,binds_book,{autoCommit:true});
+    const result=await connection.execute(`INSERT INTO BOOKS (ISBN,TITLE,AUTHOR,IMAGEURL,PRICE,RATING,QUANTITY,SELLER_EMAIL,CATEGORY,DESCRIPTION) VALUES(
+      :isbn,:title,:author,:imageurl,:price,:rating,:quantity,:userEmail,:category,:description) `,binds_book,{autoCommit:true});
 
       await connection.close();
 
@@ -286,9 +291,13 @@ app.post('/loginSeller',async(req,res)=>{
       // console.log(user);
       const storedPassword=user[1];
       // console.log(storedPassword);
-      const userName=user[2];
       const userEmail=user[0];
-      const userAddress=user[4];
+
+      const userName=user[2];
+      
+      const userAddress=user[3];
+      const userContact=user[4];
+      
       // console.log(userAddress);
       const binds={
           email:userDetails.email,
@@ -300,7 +309,7 @@ app.post('/loginSeller',async(req,res)=>{
         }
         else{
          if(result)
-         { res.send({userName,userAddress,userEmail});
+         { res.send({userName,userAddress,userEmail,userContact});
          
         // console.log(userName);
       }
@@ -331,7 +340,8 @@ app.post('/order_placing',async(req,res)=>{
  
     const binds={
       userEmail:userDetails.userEmail, //SQL1
-      total:userDetails.total
+      total:userDetails.total/100
+      
     }
 
 
@@ -372,11 +382,13 @@ app.post('/order_items_placing',async(req,res)=>{
     
     const connection= await OracleDB.getConnection(dbConfig);
 
-    const sql2=`INSERT INTO ORDER_ITEMS(ORDER_ID,ISBN,QUANTITY) VALUES(
-                  :orderId,:id,10)`
+    const sql2=`INSERT INTO ORDER_ITEMS(ORDER_ID,ISBN,QUANTITY,PRICE) VALUES(
+                  :orderId,:id,:quantity,:price)`
     const binds={
      orderId:details.orderId,
-      id:details.id
+      id:details.id,
+      quantity:(details.quantity)?details.quantity:1,
+      price:details.price
     }
     console.log(binds.orderId);
     console.log("Inside Server",binds.id)
@@ -395,6 +407,38 @@ app.post('/order_items_placing',async(req,res)=>{
   }
 })  
 
+app.post('/dashboard_Seller',async(req,res)=>{
+  try {
+    const email=req.body.userEmail;
+
+    const connection = await OracleDB.getConnection(dbConfig);
+
+    const total_books = await connection.execute(`SELECT COUNT(*) FROM Books
+     where SELLER_EMAIL=:email`,{email});
+
+    const closedOrders= await connection.execute(`SELECT COUNT(*) 
+    FROM (
+        SELECT u.firstname,o.total_amount,o.order_id,o.order_date,o.order_status,o.email 
+        FROM orders o JOIN order_items p ON o.order_id = p.order_id 
+        JOIN books b ON b.isbn = p.isbn JOIN users u ON o.email = u.email 
+        WHERE b.seller_email = :email and o.order_status='DISPATCHED' ORDER BY o.order_id DESC
+        )`,{email});
+
+    const openOrders= await connection.execute(`SELECT COUNT(*) 
+    FROM (
+        SELECT u.firstname,o.total_amount,o.order_id,o.order_date,o.order_status,o.email FROM orders o 
+        JOIN order_items p ON o.order_id = p.order_id JOIN books b ON b.isbn = p.isbn 
+        JOIN users u ON o.email = u.email WHERE b.seller_email = :email and o.order_status='PENDING'
+        ORDER BY o.order_id DESC
+         )`,{email});
+
+    res.send({total_books,openOrders,closedOrders});
+  } catch (error) {
+    console.error('Error accessing the database:', error);
+    res.status(500).send("Error in accessing the table");
+  }
+})
+
 // called from Payment.js and passed with total &
 // sends the payment intent and doesnt use db for this
 app.post('/payments/create',async(req,res)=>{
@@ -404,13 +448,13 @@ app.post('/payments/create',async(req,res)=>{
     const paymentIntent = await stripe.paymentIntents.create({
       description: 'Software development services',
       shipping: {
-        name: 'Jenny Rosen',
+        name: 'Arvindh Lakshman',
         address: {
           line1: '510 Townsend St',
           postal_code: '98140',
           city: 'San Francisco',
           state: 'CA',
-          country: 'US',
+          country: 'IN',
         },
       },
       amount: req.query.total,
@@ -418,7 +462,15 @@ app.post('/payments/create',async(req,res)=>{
       automatic_payment_methods:{
         enabled:true
       },
-    });
+      transfer_data:{
+        destination:'acct_1P3GxML8RebpoVVG'
+      },
+    },
+    // {
+    //   stripeAccount: 'acct_1P3GxML8RebpoVVG',
+    //   }
+    );
+    
     res.status(201).send({
       clientSecret :paymentIntent.client_secret, 
       total
@@ -428,6 +480,48 @@ app.post('/payments/create',async(req,res)=>{
     // console.log("Cursor is here>>>");
   res.status(201).send("No Orders")}
   })
+
+app.get ('/paymenttransfer',async(req,res)=>{
+ 
+      
+  const paymentIntent = await stripe.paymentIntents.create({
+    amount: 100000,
+    currency: 'usd',
+    payment_method: paymentMethod.id,
+    automatic_payment_methods: {
+      enabled: true,
+      allow_redirects:'never'
+    },
+    confirm:true,
+    // transfer_data:{
+    //   destination:'acct_1P3GxML8RebpoVVG'
+    // },
+    // off_session:true
+   
+  },
+  //  {
+  //     stripeAccount: 'acct_1P3GxML8RebpoVVG',
+  //   },
+  );
+
+  // await stripe.paymentIntents.confirm(paymentIntent.id)
+
+ 
+  console.log('Payment and transfer completed successfully:', transfer);
+  res.send('SUCCESS>>>>>')
+});
+
+
+app.get('/payment_create',async(req,res)=>{
+  const account = await stripe.accounts.create({
+    type: 'standard',
+    country: 'US',
+    email: 'panda@gmail.com',
+    
+  }); 
+
+  res.send(account)
+})
 
 app.post('/orderSeller',async(req,res)=>{
   try {
@@ -443,7 +537,7 @@ app.post('/orderSeller',async(req,res)=>{
 
     res.json(result.rows);
 
-    console.log(result.rows);
+    // console.log(result.rows);
   } catch (error) {
     console.error('Error accessing the database:', error);
     res.status(500).send("Error in accessing the table");
@@ -453,7 +547,7 @@ app.post('/orderSeller',async(req,res)=>{
 app.post('/transSeller',async(req,res)=>{
   try {
     const connection = await OracleDB.getConnection(dbConfig);
-    const result = await connection.execute(`select u.firstname,o.total_amount,o.order_id,o.order_date,o.order_status,o.email from orders o 
+    const result = await connection.execute(`select u.firstname,p.price,o.total_amount,o.order_id,o.order_date,o.order_status,o.email from orders o 
     join order_items p
     on o.order_id=p.order_id
     join books b
@@ -465,13 +559,96 @@ app.post('/transSeller',async(req,res)=>{
 
     res.json(result.rows); 
 
-    console.log(result.rows);
+    // console.log(result.rows);
   } catch (error) {
     console.error('Error accessing the database:', error);
     res.status(500).send("Error in accessing the table");
   }
 })
 
+app.post('/editSeller',async(req,res)=>{
+  try {
+    const userDetails=req.body;
+    console.log(userDetails);
+    const binds={
+      company_name:userDetails.name,
+      address:userDetails.address,
+      contact:userDetails.contact,
+      email:userDetails.userEmail
+    }
+
+    const connection = await OracleDB.getConnection(dbConfig);
+    const result = await connection.execute(`update seller
+    set COMPANY_NAME=:company_name,ADDRESS=:address,CONTACT=:contact
+    where email=:email`,binds,{autoCommit:true});
+
+    console.log("Data Updated Successfully");
+    res.send("Data  Updated Successfully")
+
+  } catch (error) {
+    console.log(error);
+  }
+})
+
+app.post('/edit_price',async(req,res)=>{
+  try {
+    const userDetails=req.body;
+    console.log(userDetails.current_isbn);
+    const binds={
+      newprice:userDetails.eprice,
+      email:userDetails.userEmail,
+      isbn:userDetails.current_isbn 
+    }
+
+    const connection=await OracleDB.getConnection(dbConfig);
+    const result=await connection.execute(`UPDATE books
+    SET price = :newprice
+    WHERE seller_email = :email
+    AND isbn = :isbn`,binds,{autoCommit:true});
+
+    console.log("price updated successfully");
+    res.send("price updated successfully");
+  } catch (error) {
+    console.log(error);
+  }
+})
+
+app.post('/edit_quantity',async(req,res)=>{
+  try {
+    const userDetails=req.body;
+    console.log(userDetails.current_isbn);
+    const binds={
+      newquantity:userDetails.equantity,
+      email:userDetails.userEmail,
+      isbn:userDetails.current_isbn 
+    }
+
+    const connection=await OracleDB.getConnection(dbConfig);
+    const result=await connection.execute(`UPDATE books
+    SET quantity = :newquantity
+    WHERE seller_email = :email
+    AND isbn = :isbn`,binds,{autoCommit:true});
+
+    console.log("quantity updated successfully");
+    res.send("quantity updated successfully");
+  } catch (error) {
+    console.log(error);
+  }
+})
+
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}!`);
 });
+
+
+// Trigger:
+// CREATE OR REPLACE TRIGGER after_insert
+// AFTER INSERT ON order_items
+// FOR EACH ROW
+// DECLARE
+//     book_quantity books.quantity%TYPE;
+// BEGIN
+//     SELECT quantity INTO book_quantity FROM books WHERE isbn = :NEW.isbn;
+    
+//     UPDATE books SET quantity = book_quantity - :NEW.quantity WHERE isbn = :NEW.isbn;
+// END;
