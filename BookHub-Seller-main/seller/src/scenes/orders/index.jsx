@@ -54,6 +54,7 @@ function fetchOrders() {
 }
 console.log(orders);
 const rows = orders.map((item, index) => ({
+  
   id: index + 1,
   order_id: item[0],
   order_date: item[1],

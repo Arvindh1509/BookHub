@@ -6,7 +6,10 @@ const bcrypt=require('bcrypt');
 const app = express();
 const port = 8000;
 const env=require('dotenv');
+// IN Account
 const stripe=require('stripe')('sk_test_51Os1YBSGWWLum80tqVobh8TE5LCKrPFCdftpDgZ5rBaUn2RQ6YVXELia5xpjgnChIcqincdLubYRMZGSPL359I2y00ECuNJO9F')
+// US Account
+// const stripe=require('stripe')('sk_test_51P3djB03iUD21U4gseQbQGzwjinYgzzyyxs3ZEWM6gXELiQKhnwFaziihUbnMsR5ioLvSluXpuemitV5DWjOShNg00fFYXMhmG');
 
 app.use(cors());
 env.config();
@@ -56,12 +59,14 @@ app.post('/ordersHistory',async(req,res)=>{
     const connection = await OracleDB.getConnection(dbConfig);
     let orderid={};
     let totalAmt={};
-    const cart=await connection.execute(`SELECT  ORDER_ID,total_amount FROM ORDERS WHERE EMAIL=:email
+    let order_date={};
+    const cart=await connection.execute(`SELECT  ORDER_ID,total_amount,ORDER_DATE FROM ORDERS WHERE EMAIL=:email
     order by order_id desc`,{Email});
     for (const [index, row] of cart.rows.entries()) {
       orderid[`${index + 1}`] = row[0];
       console.log(row[1]);
       totalAmt[`${index + 1}`] = row[1];
+      order_date[`${index+1}`]=row[2];
     }
    
     
@@ -86,7 +91,7 @@ app.post('/ordersHistory',async(req,res)=>{
     }
     
 
-    res.send({orderid,orderisbns,totalAmt});
+    res.send({orderid,orderisbns,totalAmt,order_date});
 
   } catch (error) {
     console.log(error); 
@@ -190,6 +195,8 @@ app.post('/register', async (req, res) => {
     }
 });
 
+// Registration form of the seller and hashing the password and storing 
+// in the database
 app.post('/registerSeller',async(req,res)=>{const userDetails = req.body;
   try {
       const connection = await OracleDB.getConnection(dbConfig);
@@ -276,6 +283,7 @@ app.post('/login', async (req, res) => {
     }
   });
 
+// Login of the seller with the authentication with 5 rounds of salting
 app.post('/loginSeller',async(req,res)=>{
   try {
     const userDetails=req.body;
@@ -407,6 +415,8 @@ app.post('/order_items_placing',async(req,res)=>{
   }
 })  
 
+// Calling the Dashboard home page with the total books providing
+// and 
 app.post('/dashboard_Seller',async(req,res)=>{
   try {
     const email=req.body.userEmail;
@@ -454,7 +464,7 @@ app.post('/payments/create',async(req,res)=>{
           postal_code: '98140',
           city: 'San Francisco',
           state: 'CA',
-          country: 'IN',
+          country: 'US',
         },
       },
       amount: req.query.total,
@@ -462,12 +472,12 @@ app.post('/payments/create',async(req,res)=>{
       automatic_payment_methods:{
         enabled:true
       },
-      transfer_data:{
-        destination:'acct_1P3GxML8RebpoVVG'
-      },
+      // transfer_data:{
+      //   destination:'acct_1P3GxML8RebpoVVG'
+      // },
     },
     // {
-    //   stripeAccount: 'acct_1P3GxML8RebpoVVG',
+    //   stripeAccount: 'acct_1P3GZ2SA9vNlWa91',
     //   }
     );
     
@@ -482,29 +492,13 @@ app.post('/payments/create',async(req,res)=>{
   })
 
 app.get ('/paymenttransfer',async(req,res)=>{
- 
-      
-  const paymentIntent = await stripe.paymentIntents.create({
-    amount: 100000,
-    currency: 'usd',
-    payment_method: paymentMethod.id,
-    automatic_payment_methods: {
-      enabled: true,
-      allow_redirects:'never'
-    },
-    confirm:true,
-    // transfer_data:{
-    //   destination:'acct_1P3GxML8RebpoVVG'
-    // },
-    // off_session:true
-   
-  },
-  //  {
-  //     stripeAccount: 'acct_1P3GxML8RebpoVVG',
-  //   },
-  );
 
-  // await stripe.paymentIntents.confirm(paymentIntent.id)
+  const transfer = await stripe.transfers.create({
+    amount: 400,
+    currency: 'inr',
+    destination: 'acct_1P3dpx07unYcKjng',
+    transfer_group: 'ORDER_95',
+  });
 
  
   console.log('Payment and transfer completed successfully:', transfer);
@@ -516,13 +510,15 @@ app.get('/payment_create',async(req,res)=>{
   const account = await stripe.accounts.create({
     type: 'standard',
     country: 'US',
-    email: 'panda@gmail.com',
+    email: 'makro@gmail.com',
     
   }); 
 
   res.send(account)
 })
 
+// the orders taken/placed to the seller from the buyer through the book
+//  store platform
 app.post('/orderSeller',async(req,res)=>{
   try {
     
@@ -544,6 +540,8 @@ app.post('/orderSeller',async(req,res)=>{
   }
 })
 
+//to show all the respective transactions of the sellers with the 
+//particular prices to the seller from the whole transaction of an order 
 app.post('/transSeller',async(req,res)=>{
   try {
     const connection = await OracleDB.getConnection(dbConfig);
@@ -566,6 +564,7 @@ app.post('/transSeller',async(req,res)=>{
   }
 })
 
+//Edit the Attributes in the seller profile and attached to DB
 app.post('/editSeller',async(req,res)=>{
   try {
     const userDetails=req.body;
@@ -590,6 +589,7 @@ app.post('/editSeller',async(req,res)=>{
   }
 })
 
+// Edit the Price of a particular book and push it into the database
 app.post('/edit_price',async(req,res)=>{
   try {
     const userDetails=req.body;
@@ -613,6 +613,7 @@ app.post('/edit_price',async(req,res)=>{
   }
 })
 
+// Edit the Quantity of a particular book and push it into the database
 app.post('/edit_quantity',async(req,res)=>{
   try {
     const userDetails=req.body;

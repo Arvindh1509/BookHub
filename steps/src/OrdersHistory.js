@@ -25,7 +25,7 @@ function OrdersHistory() {
     }) 
 
     
-  },[]); 
+  },[userEmail]); 
 
 const today = new Date();
 const day = today.getDate();
@@ -53,7 +53,16 @@ return (
                       <span className='order-date'>
 
                      <p><strong>Order placed on</strong></p>
-                      <p>{formattedDate}</p> 
+                     {
+      (() => {
+        const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
+        const date = new Date(orderData.order_date[orderId]);
+        const formattedDate = date.toLocaleDateString('en-GB', options);
+        return (
+          <p>{formattedDate}</p> 
+        );
+      })()
+    }
                       </span>
                     </div>
                   {checkbox?<p className='gift'>This is a gift</p>:""}

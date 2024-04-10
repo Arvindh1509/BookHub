@@ -26,6 +26,9 @@ import { useState } from 'react';
         })
     }
 
+    function handleSeller(){
+        history.push('/seller')
+    }
 
     return (
       <div className='Header'>
@@ -60,7 +63,7 @@ import { useState } from 'react';
                     Orders
                 </span>
             </div>
-            <div className='header_Options'>
+            <div className='header_Options' onClick={handleSeller}>
             <span className='header_lineone'>
                     Be a
                 </span>
