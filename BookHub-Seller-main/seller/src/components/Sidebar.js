@@ -45,7 +45,7 @@ const Sidebar = ({
   const { pathname } = useLocation();
   const [active, setActive] = useState("");
   const navigate = useNavigate();
-  const [{user}]=useStateValue();
+  const [{seller}]=useStateValue();
 
   useEffect(() => {
     setActive(pathname.substring(1));
@@ -145,7 +145,7 @@ const Sidebar = ({
                 <Box textAlign="left">
                   <Typography fontWeight={"bold"} fontSize={"0.9rem"}
                   sx={{color: "White"}}>
-                    {user}
+                    {seller}
                   </Typography>
                 </Box>
                 <SettingsOutlined sx={{color:"white", fontSize:"25px"}}/>

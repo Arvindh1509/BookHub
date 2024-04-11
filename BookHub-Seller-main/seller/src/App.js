@@ -4,7 +4,7 @@ import { BrowserRouter, Navigate, Route, Routes, useNavigate } from "react-route
 
 import Layout from "./scenes/Layout";
 import Dashboard from "./scenes/dashboard/index"
-import Login from "./components/Login";
+
 import Products from "./scenes/Products";
 import Orders from "./scenes/orders";
 import Transactions from "./scenes/Transactions";

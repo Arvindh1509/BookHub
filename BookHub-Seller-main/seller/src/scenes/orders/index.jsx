@@ -37,14 +37,14 @@ const columns = [
 function Orders() {
 
 const [orders,setOrders]=useState([]);
-const [{userEmail}]=useStateValue();
+const [{sellerEmail}]=useStateValue();
  
 useEffect(()=>{
   fetchOrders();
 },[]);
 
 function fetchOrders() {
-  axios.post('/orderSeller',{userEmail})
+  axios.post('/orderSeller',{sellerEmail})
     .then(response => {
       setOrders(response.data); //   the state with the received data
     })

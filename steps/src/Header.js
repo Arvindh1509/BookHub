@@ -26,9 +26,9 @@ import { useState } from 'react';
         })
     }
 
-    function handleSeller(){
-        history.push('/seller')
-    }
+    // function handleSeller(){
+    //     history.push('http://localhost:4000/loginSeller')
+    // }
 
     return (
       <div className='Header'>
@@ -63,7 +63,8 @@ import { useState } from 'react';
                     Orders
                 </span>
             </div>
-            <div className='header_Options' onClick={handleSeller}>
+            {/* <Link to='http://localhost:4000/loginSeller'> */}
+            <div className='header_Options'>
             <span className='header_lineone'>
                     Be a
                 </span>
@@ -71,6 +72,7 @@ import { useState } from 'react';
                     Seller !
                 </span>
             </div>
+            {/* </Link> */}
             <Link to ='/checkout'>
             <div className='cart'>
                 <ShoppingCartIcon />

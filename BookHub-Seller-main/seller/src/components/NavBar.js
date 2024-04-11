@@ -21,7 +21,7 @@ const Navbar = ({isSidebarOpen, setIsSidebarOpen }) => {
 
   const [anchorEl,setAnchorEl]=useState(null);
   const isOpen=Boolean(anchorEl)
-  const[{user},dispatch]=useStateValue();
+  const[{seller},dispatch]=useStateValue();
   const navigate=useNavigate();
   
   function handleClick(e){
@@ -85,7 +85,7 @@ const Navbar = ({isSidebarOpen, setIsSidebarOpen }) => {
 
                 <Typography fontWeight={"bold"} fontSize={"0.9rem"}
                   sx={{color: "White"}}>
-                    {user}
+                    {seller}
                   </Typography>
 
                   {/* <ArrowDropDownOutlined sx={{color:'white', fontSize:'25px'}}/> */}

@@ -15,14 +15,14 @@ function Add_a_book() {
   const [quantity,setQuantity]=useState('');
   const [category,setCategory]=useState('');
 
-  const[{user,userEmail}]=useStateValue();
+  const[{seller,sellerEmail}]=useStateValue();
 
 
 
   function handleEvent(e){
     e.preventDefault();
     {if(isbn&&title&&img&&author&&description&&quantity&&price&&category){
-    axios.post('/book_insert',{isbn,title,author,img,price,quantity,userEmail,category,description})
+    axios.post('/book_insert',{isbn,title,author,img,price,quantity,sellerEmail,category,description})
     .then((data)=>{
       setIsbn('')
       setTitle('')

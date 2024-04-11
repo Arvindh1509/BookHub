@@ -7,9 +7,9 @@ const app = express();
 const port = 8000;
 const env=require('dotenv');
 // IN Account
-const stripe=require('stripe')('sk_test_51Os1YBSGWWLum80tqVobh8TE5LCKrPFCdftpDgZ5rBaUn2RQ6YVXELia5xpjgnChIcqincdLubYRMZGSPL359I2y00ECuNJO9F')
+const stripe=require('stripe')(process.env.SECRETKEY)
 // US Account
-// const stripe=require('stripe')('sk_test_51P3djB03iUD21U4gseQbQGzwjinYgzzyyxs3ZEWM6gXELiQKhnwFaziihUbnMsR5ioLvSluXpuemitV5DWjOShNg00fFYXMhmG');
+// const stripe=require('stripe')(process.env.USASECRETKEY);
 
 app.use(cors());
 env.config();
@@ -40,7 +40,7 @@ app.post('/books_seller',async(req,res)=>{
   try {
     // console.log(req.body.userEmail);
     const connection = await OracleDB.getConnection(dbConfig);
-    const result = await connection.execute('SELECT * FROM Books where seller_email=:userEmail',{ userEmail: req.body.userEmail },{autoCommit:true});
+    const result = await connection.execute('SELECT * FROM Books where seller_email=:userEmail',{ userEmail: req.body.sellerEmail },{autoCommit:true});
 
     res.json(result.rows);
   } catch (error) {
@@ -131,7 +131,7 @@ app.post('/book_insert',async(req,res)=>{
       price:book_details.price,
       quantity:book_details.quantity,
       rating:book_details.rating,
-      userEmail:book_details.userEmail,
+      userEmail:book_details.sellerEmail,
       category:book_details.category,
       description:book_details.description
     };
@@ -419,7 +419,7 @@ app.post('/order_items_placing',async(req,res)=>{
 // and 
 app.post('/dashboard_Seller',async(req,res)=>{
   try {
-    const email=req.body.userEmail;
+    const email=req.body.sellerEmail;
 
     const connection = await OracleDB.getConnection(dbConfig);
 
@@ -529,7 +529,7 @@ app.post('/orderSeller',async(req,res)=>{
     join books b
     on b.isbn=p.isbn
     where b.seller_email=:userEmail
-    order by order_id desc`,{userEmail:req.body.userEmail});
+    order by order_id desc`,{userEmail:req.body.sellerEmail});
 
     res.json(result.rows);
 
@@ -553,7 +553,7 @@ app.post('/transSeller',async(req,res)=>{
     join users u
     on o.email=u.email
     where b.seller_email=:userEmail
-    order by order_id desc`,{userEmail:req.body.userEmail});
+    order by order_id desc`,{userEmail:req.body.sellerEmail});
 
     res.json(result.rows); 
 
@@ -573,7 +573,7 @@ app.post('/editSeller',async(req,res)=>{
       company_name:userDetails.name,
       address:userDetails.address,
       contact:userDetails.contact,
-      email:userDetails.userEmail
+      email:userDetails.sellerEmail
     }
 
     const connection = await OracleDB.getConnection(dbConfig);
@@ -596,7 +596,7 @@ app.post('/edit_price',async(req,res)=>{
     console.log(userDetails.current_isbn);
     const binds={
       newprice:userDetails.eprice,
-      email:userDetails.userEmail,
+      email:userDetails.sellerEmail,
       isbn:userDetails.current_isbn 
     }
 
@@ -620,7 +620,7 @@ app.post('/edit_quantity',async(req,res)=>{
     console.log(userDetails.current_isbn);
     const binds={
       newquantity:userDetails.equantity,
-      email:userDetails.userEmail,
+      email:userDetails.sellerEmail,
       isbn:userDetails.current_isbn 
     }
 

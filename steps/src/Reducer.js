@@ -21,16 +21,7 @@ export const getBasketTotal  = (basket,checkbox) =>{
    
     return amount + (item.price*(item.quantity?item.quantity:1  )) ;
   }, 0))};
-
-//   export const getOrderTotal  = (order,checkbox) =>{ 
-    
-//     const additionalAmount = (checkbox==true) ? 0:200;
-//     console.log("into the function",checkbox);
-//     console.log(additionalAmount);
-//     return (additionalAmount+order?.reduce((amount, item) => {
-   
-//     return amount + item.price ;
-//   }, 0))};  
+  
 function reducer(state,action){
     console.log(action);
     switch(action.type){ 

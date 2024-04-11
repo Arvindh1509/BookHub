@@ -12,7 +12,7 @@ const Product=({isbn,title,author,price,rating,quantity,category})=>{
   const [eprice,setEprice]=useState(price);
   const [equantity,setEquantity]=useState(quantity);
 
-  const [{userEmail,current_isbn},dispatch]=useStateValue();
+  const [{sellerEmail,current_isbn},dispatch]=useStateValue();
 
  
 
@@ -25,7 +25,7 @@ const Product=({isbn,title,author,price,rating,quantity,category})=>{
 
   function handleQuantity(){
     // createQuantity();
-    axios.post('/edit_quantity',{equantity,userEmail,current_isbn})
+    axios.post('/edit_quantity',{equantity,sellerEmail,current_isbn})
     // clearQuantity();
   }
 
@@ -46,7 +46,7 @@ const Product=({isbn,title,author,price,rating,quantity,category})=>{
 
   function handlePrice(){
     // createPrice();
-    axios.post('/edit_price',{eprice,userEmail,current_isbn})
+    axios.post('/edit_price',{eprice,sellerEmail,current_isbn})
     // clearPrice();
   }
 
@@ -160,14 +160,14 @@ const Product=({isbn,title,author,price,rating,quantity,category})=>{
 function Products() {
 
   const [books,setBooks]=useState([]);
-  const [{userEmail},dispatch]=useStateValue();
+  const [{sellerEmail},dispatch]=useStateValue();
  
   useEffect(()=>{
     fetchBooks();
   },[]);
  
   function fetchBooks() {
-    axios.post('/books_seller',{userEmail})
+    axios.post('/books_seller',{sellerEmail})
       .then(response => {
         setBooks(response.data);
         dispatch({

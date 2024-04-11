@@ -9,7 +9,7 @@ import axios from '../../axios'
 
 function Dashboard() {
   
-  const [{user,userEmail}] =useStateValue();
+  const [{seller,sellerEmail}] =useStateValue();
   const [closedOrders,setClosedorders]=useState();
   const [openOrders,setOpenorders]=useState();
   const [totalOrders,setTotalOrders]=useState();
@@ -21,7 +21,7 @@ function Dashboard() {
 
 
   function fetchInfo(){
-    axios.post('/dashboard_Seller',{userEmail})
+    axios.post('/dashboard_Seller',{sellerEmail})
     .then((data)=>{
       setClosedorders(data.data.closedOrders.rows[0][0]);
       setOpenorders(data.data.openOrders.rows[0][0]);
@@ -33,11 +33,11 @@ function Dashboard() {
     })
   }
 
-  console.log(user);
+  console.log(seller);
 
-  return (user?<Box m="1.5rem 2.5rem">
+  return (seller?<Box m="1.5rem 2.5rem">
     <FlexBetween >
-        <Header title={`Welcome ${user}, Your Dashboard`}/>
+        <Header title={`Welcome ${seller}, Your Dashboard`}/>
     </FlexBetween>
     <Box mt="20px" display={"flex"}
     gap="20px"

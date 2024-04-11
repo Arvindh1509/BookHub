@@ -45,14 +45,14 @@ const columns = [
 function Transactions() {
 
   const [transactions,setTransactions]=useState([]);
-  const [{userEmail}]=useStateValue();
+  const [{sellerEmail}]=useStateValue();
  
 useEffect(()=>{
   fetchTransactions();
 },[]);
 
 function fetchTransactions() {
-  axios.post('/transSeller',{userEmail})
+  axios.post('/transSeller',{sellerEmail})
     .then(response => {
       setTransactions(response.data); //   the state with the received data
     })

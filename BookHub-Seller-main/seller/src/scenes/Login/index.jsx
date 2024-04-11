@@ -8,7 +8,7 @@ import { useStateValue } from '../../StateProvider';
 function LoginSeller() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [{user},dispatch]=useStateValue();
+    const [{seller},dispatch]=useStateValue();
     const navigate=useNavigate();
 
     function signin(e) {

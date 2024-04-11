@@ -8,15 +8,15 @@ import axios from '../../axios'
 
 function Your_Profile() {
 
-    const [{user,userAddress,userContact,userEmail},dispatch]=useStateValue();
+    const [{seller,sellerAddress,sellerContact,sellerEmail},dispatch]=useStateValue();
     const [edit,setEdit]=useState(false);
 
-    const [name,setName]=useState(user);
-    const [address,setAddress]=useState(userAddress)
-    const [contact,setContact]=useState(userContact)
+    const [name,setName]=useState(seller);
+    const [address,setAddress]=useState(sellerAddress)
+    const [contact,setContact]=useState(sellerContact)
 
     function handleSave(){
-      axios.post('/editSeller',{name,address,contact,userEmail})
+      axios.post('/editSeller',{name,address,contact,sellerEmail})
       .then(
         dispatch({
           type: 'editSeller',
@@ -30,7 +30,7 @@ function Your_Profile() {
   return (
     <div>
       <Box m="1.25rem ">
-            <Header title={`Hi!, ${user}`} />
+            <Header title={`Hi!, ${seller}`} />
             
         </Box>
     
@@ -49,7 +49,7 @@ function Your_Profile() {
         <tr>
           <td>Your Email</td>
           <td>
-            <input value={userEmail} disabled />
+            <input value={sellerEmail} disabled />
           </td>
         </tr>
         <tr>

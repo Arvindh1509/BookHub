@@ -14,7 +14,7 @@ import {loadStripe} from "@stripe/stripe-js"
 import {Elements } from "@stripe/react-stripe-js"
 import Payment_direct from './Payment_direct';
 import { useState } from 'react';
-import LoginSeller from '../../BookHub-Seller-main/seller/src/scenes/Login';
+// import LoginSeller from '../../BookHub-Seller-main/seller/src/scenes/Login';
 
  const promise=loadStripe('pk_test_51Os1YBSGWWLum80t1jDc4VyVDFG3mT5kPSfzZeWaOktoIisebvL1BORdBFlifXjzauFxtOqMLBk2x98iiaYzm282003Plbj1uo')
 // const promise=loadStripe('pk_test_51P3djB03iUD21U4garcN9aX1xotpSJSGzJyz0shtS5dcY0ixGBADILeShBboxjzyHlvjJ21ROHHVphrjrMFhQwie00valKBlik')
@@ -35,16 +35,17 @@ function App() {
       <div className="App">
         {/* <h1>Hello World!</h1> */}
         <Switch>
-        {/* Check out page */}
-        <Route path='/seller'>
+        
+        {/* <Route path='/seller'>
           <LoginSeller/>
-        </Route>
+        </Route> */}
 
 
         <Route path='/samplePayment'>
             <Payment_direct/>
           </Route>
 
+        {/* Check out page */}
           <Route path='/checkout'> 
             <Header />
             {/* also contains the checkout separate book components 

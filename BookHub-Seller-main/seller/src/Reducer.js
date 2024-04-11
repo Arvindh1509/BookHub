@@ -1,8 +1,8 @@
 export const initialState={
-user:null,
-userEmail:null,
-userAddress:null,
-userContact:null,
+seller:null,
+sellerEmail:null,
+sellerAddress:null,
+sellerContact:null,
 current_isbn:null,
 books:[]
 }
@@ -12,18 +12,18 @@ function reducer(state,action){
         case 'loginSeller':
             return{
                 ...state,
-                user:action.user,
-                userEmail:action.userEmail,
-                userAddress:action.userAddress,
-                userContact:action.userContact
+                seller:action.user,
+                sellerEmail:action.userEmail,
+                sellerAddress:action.userAddress,
+                sellerContact:action.userContact
             }
 
         case 'logoutSeller':
             return{
-                user:null,
-                userEmail:null,
-                userAddress:null,
-                userContact:null
+                seller:null,
+                sellerEmail:null,
+                sellerAddress:null,
+                sellerContact:null
             }    
 
         case 'addbooks':
@@ -35,9 +35,9 @@ function reducer(state,action){
         case 'editSeller':
             return{
                 ...state,
-                user:action.user,
-                userAddress:action.userAddress,
-                userContact:action.userContact
+                seller:action.user,
+                sellerAddress:action.userAddress,
+                sellerContact:action.userContact
             }
 
         case 'editPrice':
