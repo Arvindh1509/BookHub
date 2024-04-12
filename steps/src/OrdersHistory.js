@@ -5,6 +5,7 @@ import axios from './axios';
 import CheckoutBook from './CheckoutBook';
 import CurrencyFormat from 'react-currency-format';
 import './Order.css';
+import AnimatedPage from './AnimatedPage';
 
 function OrdersHistory() {
 
@@ -34,6 +35,8 @@ const year = today.getFullYear();
 const formattedDate = `${day}-${month}-${year}`;
 
 return (
+  <AnimatedPage>
+
   <div className='orders'>
     <div className='order_title'>
       <h1>Orders History</h1>    
@@ -99,6 +102,7 @@ return (
           )}
           ):<div>No orders</div>}
     </div>
+  </AnimatedPage>
   )
 }
 export default OrdersHistory

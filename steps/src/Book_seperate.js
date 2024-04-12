@@ -3,6 +3,7 @@ import { useStateValue } from './Stateprovider'
 import './Book_seperate.css'
 import StarIcon from '@mui/icons-material/Star';
 import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
+import AnimatedPage from './AnimatedPage';
 
 function Book_seperate() {
     const[{viewedBook,user},dispatch]=useStateValue();
@@ -57,6 +58,8 @@ function Book_seperate() {
 
    
   return (
+    <AnimatedPage>
+
     <div>
       {/* <h1>Book Details</h1> */}
       {viewedBook &&( 
@@ -97,6 +100,7 @@ function Book_seperate() {
         </div>
       )}
     </div>
+    </AnimatedPage>
   )
 }
 

@@ -4,6 +4,7 @@ import './index.css'
 import Header from '../../components/Header';
 import { Box } from '@mui/material'
 import axios from '../../axios'
+import AnimatedPage from '../../components/AnimatedPage';
 
 
 function Your_Profile() {
@@ -28,6 +29,8 @@ function Your_Profile() {
     }
 
   return (
+    <AnimatedPage>
+
     <div>
       <Box m="1.25rem ">
             <Header title={`Hi!, ${seller}`} />
@@ -79,6 +82,7 @@ function Your_Profile() {
     </div>
     </div>
     </div>
+    </AnimatedPage>
   )
 }
 

@@ -50,3 +50,21 @@
     padding-left: 20%;
     padding-top: 10px;
 }
+
+.razorpay{
+    width:100%;
+    
+}
+
+.rzpaybtn{
+    width: 15%;
+    border-radius: 5px;
+    border: none;
+    background-color: whitesmoke;
+    cursor: pointer;
+}
+
+.rzpaybtn:hover{
+    background-color: gainsboro;
+    border: 1px solid;
+}

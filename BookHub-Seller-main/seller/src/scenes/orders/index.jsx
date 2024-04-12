@@ -5,6 +5,7 @@ import { DataGrid } from '@mui/x-data-grid';
 import './index.css'
 import axios from '../../axios';
 import { useStateValue } from '../../StateProvider';
+import AnimatedPage from '../../components/AnimatedPage';
 
 const columns = [
   {field:'id',headerName:'ID',width:90},
@@ -69,6 +70,8 @@ const getRowClassName = (params) => {
   // return params.row.order_status === ('dispatched'||'DISPATCHED') ? 'green-background' : 'red-background';
 };
   return (
+    <AnimatedPage>
+
     <Box m='1.5rem 2.5rem'>
         <Header title='Orders'/>
         <Box
@@ -109,6 +112,7 @@ const getRowClassName = (params) => {
             />
         </Box>
     </Box>
+    </AnimatedPage>
   )
 }
 

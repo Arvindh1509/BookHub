@@ -4,6 +4,7 @@ import './Login.css';
 import axios from './axios';
 import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 import { useStateValue } from './Stateprovider';
+import AnimatedPage from './AnimatedPage';
 
 
 function Login() {
@@ -33,6 +34,8 @@ function Login() {
         .catch((error)=>alert(error.response.data));
     }
     return (
+        <AnimatedPage>
+
         <div className='login'>
             <Link to='/'>
                 <img className='login_logo' src='https://allsaintsvaschool.org/wp-content/uploads/2020/08/BookHub-logo.jpg' alt="Logo"/>
@@ -57,6 +60,7 @@ function Login() {
                 </Link>
             </div>
         </div>
+        </AnimatedPage>
     );
 }
 

@@ -3,6 +3,7 @@ import './Login.css'
 import { Link, useHistory } from 'react-router-dom/cjs/react-router-dom.min'
 import axios from './axios';
 import './Register.css';
+import AnimatedPage from './AnimatedPage';
 
 
 
@@ -93,6 +94,8 @@ function HandlePhone(e){
   }
 
   return (
+    <AnimatedPage>
+
     <div className='login'>
     <Link to='/'>
       <img className='login_logo' src='https://allsaintsvaschool.org/wp-content/uploads/2020/08/BookHub-logo.jpg'/>
@@ -161,6 +164,7 @@ function HandlePhone(e){
         </Link>
     </div>
     </div>
+    </AnimatedPage>
   )
 }
 

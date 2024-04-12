@@ -5,6 +5,7 @@
   import { Link,useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 import { useStateValue } from './Stateprovider';
 import { useState } from 'react';
+import AnimatedPage from './AnimatedPage';
   
   function Header({searchChange}) {
     const [searchValue,setSearchValue] =useState('');
@@ -31,6 +32,8 @@ import { useState } from 'react';
     // }
 
     return (
+        <AnimatedPage>
+
       <div className='Header'>
         <img className='header_logo' src='https://allsaintsvaschool.org/wp-content/uploads/2020/08/BookHub-logo.jpg' onClick={()=>{searchValue?searchChange(''):history.push('/')
         setSearchValue('')}}/>
@@ -81,6 +84,7 @@ import { useState } from 'react';
             </Link>
         </div>
       </div>
+        </AnimatedPage>
     )
   }
   

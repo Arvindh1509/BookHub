@@ -4,6 +4,7 @@ import { Box } from '@mui/material'
 import axios from '../../axios';
 import './index.css'
 import { useStateValue } from '../../StateProvider';
+import AnimatedPage from '../../components/AnimatedPage';
 
 function Add_a_book() {
   const [isbn,setIsbn]=useState('');
@@ -44,6 +45,8 @@ function Add_a_book() {
   }
   }
   return (
+    <AnimatedPage>
+
     <div className='login'>
         <Box m="1.25rem ">
             <Header title="Add a Book" />
@@ -88,6 +91,7 @@ function Add_a_book() {
         </form>
     </div>
     </div>
+    </AnimatedPage>
   )
 }
 

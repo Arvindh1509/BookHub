@@ -8,6 +8,7 @@ import CurrencyFormat from 'react-currency-format';
 import { PaymentElement,CardElement,useElements, useStripe, Elements } from '@stripe/react-stripe-js';
 import axios from './axios';
 import CheckoutForm from './PaymentPortalForm';
+import AnimatedPage from './AnimatedPage';
 
 // import { Checkbox } from '@mui/material';
 // import Subtotal from './Subtotal';
@@ -106,6 +107,71 @@ function Payment({promise}) {
 
     }
 
+    function razorpay(e){
+    
+      e.preventDefault();
+      if(total==0){
+        alert("please enter amount");
+      }else{
+        console.log("HIIIIIIIIIIII",total);
+        
+        var options={
+          key:"rzp_test_sd095naLU4rfSS",
+          key_secret:"yL6GOwd56hVBBZIGvvwNPVs8",
+          amount:total,
+          currency:"INR",
+          name:"Projects",
+          description:"for sample testing",
+          handler:function(response){
+            alert("Payment Successfully Completed with Payment ID:",response.razorpay_payment_id);
+            const done=response.razorpay_payment_id;
+            {done && 
+              setSucceeded(true); //transaction succeeded
+              setError(null);//there's no error
+              setProcessing(false);//processing is finished
+              
+              var orderId =""
+              axios.post('/order_placing',{userEmail,total:(total),gift:checkbox})
+              .then((response)=>{
+                orderId=response.data[0]
+                // console.log("This is OrderID",orderId);
+                {basket.map(item=>(
+                  axios.post('/order_items_placing',{orderId:orderId,id:item.id,quantity:item.quantity,price:(item.quantity)?item.price*item.quantity:item.price})
+                 ))}}
+                )
+
+                dispatch({
+                  type: 'add_to_order',
+                  payload:{basket:basket,price:getBasketTotal(basket,!checkbox)}
+                });
+                dispatch({
+                  type:"empty_basket"
+                })
+                
+        
+                useHistory.push('/OrdersHistory')
+                
+          }
+        },
+          prefill:{
+            name:"arvindh",
+            email:"rockstararvindh@gmail.com",
+            contact:"9345198715"
+          },
+          notes:{
+            address:"RazorPay Corporate Office"
+          },
+          theme:{
+            color:"#3399cc"
+          }
+        };
+        var pay=new window.Razorpay(options);
+        pay.open();
+        
+      }
+    }
+
+
     function handleChange(e){//for card errir if customer types incorrect details
       
       setDisabled(e.empty);
@@ -113,6 +179,7 @@ function Payment({promise}) {
     }
 
   return (
+    <AnimatedPage>
     <div className='payment'>
     <div className='payment_container'>
         <h1>CHECKOUT (
@@ -162,6 +229,10 @@ function Payment({promise}) {
           <CheckoutForm />
         </Elements>
       )} */}
+      <h4>RazorPay:</h4>
+        <button className='rzpaybtn' onClick={razorpay}>
+          <img className='razorpay' src='https://upload.wikimedia.org/wikipedia/commons/8/89/Razorpay_logo.svg' alt='razorpay'/>
+        </button>
                 
                 <div className='payment_price'>
                 <CurrencyFormat 
@@ -191,6 +262,7 @@ function Payment({promise}) {
       </div>
       
     </div>
+    </AnimatedPage>
   )
 }
 

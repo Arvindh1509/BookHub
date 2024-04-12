@@ -3,6 +3,7 @@ import './CheckoutBook.css'
 import { useStateValue } from './Stateprovider'
 import StarIcon from '@mui/icons-material/Star';
 import { Link } from 'react-router-dom/cjs/react-router-dom.min';
+import AnimatedPage from './AnimatedPage';
 
 function CheckoutBook({id,title,image,price,rating,description,hidebutton,quantity,category,seller}) {
 const[{viewedBook,basket},dispatch]=useStateValue();
@@ -31,7 +32,8 @@ const[{viewedBook,basket},dispatch]=useStateValue();
       })
     }
   return (
-    
+    <AnimatedPage>
+
     <div className='checkout_book'>
     {/* {console.log("inside checoutbookpage>>",image,title,price,rating)} */}
     <Link to='/Book_seperate'>
@@ -59,6 +61,7 @@ const[{viewedBook,basket},dispatch]=useStateValue();
      </div>
 
     </div>
+    </AnimatedPage>
   )
 }
 

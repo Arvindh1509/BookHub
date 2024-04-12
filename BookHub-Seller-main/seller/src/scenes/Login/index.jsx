@@ -3,6 +3,7 @@ import { Link, Navigate,useNavigate } from 'react-router-dom';
 import './Login.css';
 import axios from '../../axios';
 import { useStateValue } from '../../StateProvider';
+import AnimatedPage from '../../components/AnimatedPage';
 
 
 function LoginSeller() {
@@ -33,6 +34,8 @@ function LoginSeller() {
         .catch((error)=>alert(error.response.data));
     }
     return (
+        <AnimatedPage>
+
         <div className='login'>
            
                 <img className='login_logo' src='https://allsaintsvaschool.org/wp-content/uploads/2020/08/BookHub-logo.jpg' alt="Logo"/>
@@ -57,6 +60,7 @@ function LoginSeller() {
                 </Link>
             </div>
         </div>
+        </AnimatedPage>
     );
 }
 

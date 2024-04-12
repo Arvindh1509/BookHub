@@ -6,6 +6,7 @@ import Statbox from '../../components/Statbox';
 import { useStateValue } from '../../StateProvider';
 import { Navigate } from 'react-router-dom';
 import axios from '../../axios'
+import AnimatedPage from '../../components/AnimatedPage';
 
 function Dashboard() {
   
@@ -35,7 +36,9 @@ function Dashboard() {
 
   console.log(seller);
 
-  return (seller?<Box m="1.5rem 2.5rem">
+  return (seller?<AnimatedPage>
+
+  <Box m="1.5rem 2.5rem">
     <FlexBetween >
         <Header title={`Welcome ${seller}, Your Dashboard`}/>
     </FlexBetween>
@@ -47,7 +50,8 @@ function Dashboard() {
       <Statbox title={"Open Orders"} value={openOrders}/>
       <Statbox title={"Closed Orders"} value={closedOrders}/> 
     </Box> 
-  </Box>:<Navigate to={'/loginSeller'} replace={true}/>)
+  </Box></AnimatedPage>:<Navigate to={'/loginSeller'} replace={true}/>)
+  
 
   
 }

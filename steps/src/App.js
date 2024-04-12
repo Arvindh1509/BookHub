@@ -14,6 +14,7 @@ import {loadStripe} from "@stripe/stripe-js"
 import {Elements } from "@stripe/react-stripe-js"
 import Payment_direct from './Payment_direct';
 import { useState } from 'react';
+import AnimatedPage from './AnimatedPage';
 // import LoginSeller from '../../BookHub-Seller-main/seller/src/scenes/Login';
 
  const promise=loadStripe('pk_test_51Os1YBSGWWLum80t1jDc4VyVDFG3mT5kPSfzZeWaOktoIisebvL1BORdBFlifXjzauFxtOqMLBk2x98iiaYzm282003Plbj1uo')
@@ -31,6 +32,8 @@ function App() {
   }
 
   return (
+    <AnimatedPage>
+
     <Router>
       <div className="App">
         {/* <h1>Hello World!</h1> */}
@@ -104,6 +107,7 @@ function App() {
        </Switch>
       </div>
     </Router>
+    </AnimatedPage>
   );
 }
 

@@ -5,6 +5,7 @@ import { DataGrid } from '@mui/x-data-grid';
 import axios from '../../axios';
 import { useStateValue } from '../../StateProvider';
 import './index.css'
+import AnimatedPage from '../../components/AnimatedPage';
 
 const columns = [
     { field: 'id', headerName: 'ID', width: 90 },
@@ -75,6 +76,8 @@ return 'green-background'
 };
 
   return (
+    <AnimatedPage>
+
     <Box m='1.5rem 2.5rem'>
         <Header title='Transactions'/>
         <Box
@@ -96,6 +99,7 @@ return 'green-background'
             />
         </Box>
     </Box>
+    </AnimatedPage>
   )
 }
 

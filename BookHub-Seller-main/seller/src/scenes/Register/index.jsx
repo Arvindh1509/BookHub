@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import axios from '../../axios';
 import './Register.css';
 import { Link, Navigate } from 'react-router-dom';
+import AnimatedPage from '../../components/AnimatedPage';
 
 
 
@@ -90,6 +91,8 @@ function HandlePhone(e){
   }
 
   return (
+    <AnimatedPage>
+
     <div className='login'>
       <img className='login_logo' src='https://allsaintsvaschool.org/wp-content/uploads/2020/08/BookHub-logo.jpg'/>
     
@@ -151,6 +154,7 @@ function HandlePhone(e){
         </Link>
     </div>
     </div>
+    </AnimatedPage>
   )
 }
 

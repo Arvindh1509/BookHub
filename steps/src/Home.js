@@ -3,6 +3,7 @@ import './Home.css'
 import top_image from './images/Top_image_website.jpg';
 import Book from './Book';
 import axios from './axios';
+import AnimatedPage from './AnimatedPage';
 
 function Home({search1}) {
 
@@ -37,6 +38,8 @@ console.log(search1);
 // console.log("Books:",books)
 
   return (
+    <AnimatedPage>
+
     <div className='Home'>
       <div className='home_ad'>
         <img className='top_image' src={top_image}/>
@@ -116,6 +119,7 @@ image={'https://m.media-amazon.com/images/I/41Jwy4IWtCL._SY445_SX342_.jpg'}
       </div>
       </div>
     </div>
+    </AnimatedPage>
   )
 }
 

@@ -4,6 +4,7 @@ import axios from '../../axios';
 import './index.css'
 import Header from '../../components/Header'
 import { useStateValue } from '../../StateProvider';
+import AnimatedPage from '../../components/AnimatedPage';
 
 const Product=({isbn,title,author,price,rating,quantity,category})=>{
   const [isExpanded,setIsExpanded]=useState(false);
@@ -11,18 +12,18 @@ const Product=({isbn,title,author,price,rating,quantity,category})=>{
   const [editQ,setEditQ]=useState(false);
   const [eprice,setEprice]=useState(price);
   const [equantity,setEquantity]=useState(quantity);
-
+  
   const [{sellerEmail,current_isbn},dispatch]=useStateValue();
-
- 
-
+  
+  
+  
   function createQuantity(){
     dispatch({
       type:'editQuantity',
       isbn:isbn
     })
   }
-
+  
   function handleQuantity(){
     // createQuantity();
     axios.post('/edit_quantity',{equantity,sellerEmail,current_isbn})
@@ -42,8 +43,8 @@ const Product=({isbn,title,author,price,rating,quantity,category})=>{
       isbn:isbn
     })
   }
- 
-
+  
+  
   function handlePrice(){
     // createPrice();
     axios.post('/edit_price',{eprice,sellerEmail,current_isbn})
@@ -57,6 +58,8 @@ const Product=({isbn,title,author,price,rating,quantity,category})=>{
     })
   }
   return(
+    
+
       <Card
         sx={{
           backgroundImage: "none",
@@ -181,6 +184,7 @@ function Products() {
   }
 
   return (
+    <AnimatedPage>
     <Box m="1.5rem 2.5rem">
         <Header title="List Of Books"/> 
         <Box
@@ -261,6 +265,7 @@ function Products() {
           
         </Box>
     </Box>
+  </AnimatedPage>
   )
 }
 

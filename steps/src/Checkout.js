@@ -4,10 +4,13 @@ import Subtotal from './Subtotal';
 import CheckoutBook from './CheckoutBook';
 import { useStateValue } from './Stateprovider';
 import { getBasketTotal } from './Reducer';
+import AnimatedPage from './AnimatedPage';
 
 function Checkout() {
   const [{basket,checkbox,viewedBook}]=useStateValue();
   return (
+    <AnimatedPage>
+
     <div className='checkout'>
     {console.log("The basket price>>>",getBasketTotal(basket,!checkbox))}
       <div className='checkout-left'>
@@ -45,6 +48,7 @@ function Checkout() {
 
 
     </div>
+    </AnimatedPage>
   )
 }
 

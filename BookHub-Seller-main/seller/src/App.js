@@ -12,10 +12,13 @@ import Add_a_book from "./scenes/Add_a_Book";
 import LoginSeller from "./scenes/Login";
 import RegisterSeller from "./scenes/Register";
 import Your_Profile from "./scenes/Your_Profile";
+import AnimatedPage from "./components/AnimatedPage";
 function App() {
 
   // const navigate=useNavigate();
   return (
+    <AnimatedPage>
+
     <div className="app">
       <BrowserRouter>
           <CssBaseline />
@@ -36,6 +39,7 @@ function App() {
           </Routes>
       </BrowserRouter>
     </div>
+    </AnimatedPage>
   );
 }
 

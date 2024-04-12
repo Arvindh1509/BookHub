@@ -1,9 +1,12 @@
 import React from 'react'
 import FlexBetween from './FlexBetween'
 import { Box, Typography } from '@mui/material'
+import AnimatedPage from './AnimatedPage'
 
 function Statbox({title,value,increase,icon,description}) {
   return (
+    <AnimatedPage>
+
    <Box 
 
    display="flex"
@@ -25,6 +28,7 @@ function Statbox({title,value,increase,icon,description}) {
    </FlexBetween>
 
    </Box>
+    </AnimatedPage>
   )
 }
 
