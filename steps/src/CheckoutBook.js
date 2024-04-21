@@ -5,7 +5,7 @@ import StarIcon from '@mui/icons-material/Star';
 import { Link } from 'react-router-dom/cjs/react-router-dom.min';
 import AnimatedPage from './AnimatedPage';
 
-function CheckoutBook({id,title,image,price,rating,description,hidebutton,quantity,category,seller}) {
+function CheckoutBook({id,favour,title,image,price,rating,description,hidebutton,quantity,category,seller}) {
 const[{viewedBook,basket},dispatch]=useStateValue();
     function removefromCart(){
         (dispatch({
@@ -31,6 +31,13 @@ const[{viewedBook,basket},dispatch]=useStateValue();
         }
       })
     }
+
+    function remove_from_fav(){
+      dispatch({
+        type:'remove_from_fav',
+        id:id
+      })
+    }
   return (
     <AnimatedPage>
 
@@ -50,11 +57,16 @@ const[{viewedBook,basket},dispatch]=useStateValue();
         <p className='checkout_book_price'>
             <small>Rs </small>
             <strong>{price}</strong>
-            <h4>Quantity: {quantity}</h4>
+            {favour?"":<h4>Quantity: {quantity}</h4>}
         </p>
         {
           hidebutton && (
             <button onClick={removefromCart}>Remove from the basket</button>
+          )
+        }
+        {
+          favour && (
+            <button onClick={remove_from_fav}>Remove from Wishlist</button>
           )
         }
         

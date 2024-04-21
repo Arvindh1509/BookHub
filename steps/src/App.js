@@ -15,6 +15,8 @@ import {Elements } from "@stripe/react-stripe-js"
 import Payment_direct from './Payment_direct';
 import { useState } from 'react';
 import AnimatedPage from './AnimatedPage';
+import Wishlist from './Wishlist';
+import Profile from './Profile';
 // import LoginSeller from '../../BookHub-Seller-main/seller/src/scenes/Login';
 
  const promise=loadStripe('pk_test_51Os1YBSGWWLum80t1jDc4VyVDFG3mT5kPSfzZeWaOktoIisebvL1BORdBFlifXjzauFxtOqMLBk2x98iiaYzm282003Plbj1uo')
@@ -42,6 +44,15 @@ function App() {
         {/* <Route path='/seller'>
           <LoginSeller/>
         </Route> */}
+        <Route path='/Favourites'>
+        <Header/>
+            <Wishlist/>
+          </Route>
+
+          <Route path='/Profile'>
+            <Header/>
+            <Profile/>
+          </Route>
 
 
         <Route path='/samplePayment'>
@@ -103,6 +114,8 @@ function App() {
           <Route path='/samplePayment'>
             <Payment_direct/>
           </Route>
+
+          
 
        </Switch>
       </div>

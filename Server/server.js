@@ -252,8 +252,10 @@ app.post('/login', async (req, res) => {
         const storedPassword=user[3];
         console.log(storedPassword);
         const userName=user[0];
+        const lastName=user[1];
         const userEmail=user[2];
         const userAddress=user[4];
+        const userContact=user[5];
         // console.log(userAddress);
         const binds={
             email:userDetails.email,
@@ -265,7 +267,7 @@ app.post('/login', async (req, res) => {
           }
           else{
            if(result)
-           { res.send({userName,userAddress,userEmail});
+           { res.send({userName,userAddress,userEmail,lastName,userContact});
            
           // console.log(userName);
         }

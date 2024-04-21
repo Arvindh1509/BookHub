@@ -1,12 +1,41 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import './Book.css'
 import { useStateValue } from './Stateprovider';
 import { Link } from 'react-router-dom/cjs/react-router-dom.min';
 import StarIcon from '@mui/icons-material/Star';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import { Icon, IconButton } from '@mui/material';
 
 function Book({id,title,author,image,price,rating,quantity,category,seller,description}) {
 
-  const [{basket},dispatch] = useStateValue();
+  const [{basket,favourite},dispatch] = useStateValue();
+  const [fav,setFav]=useState(false);
+
+  // useEffect(()=>{console.log("Favourites>>>>>",favourite);}
+  // ,[fav]);
+
+  function favourites(favo){
+    {favo?dispatch({
+      type:'remove_from_fav',
+      id:id
+    }):
+    dispatch({
+      type:'add_to_fav',
+      item:{
+        key:id,
+        id:id,
+        title,
+        price:price,
+        rating:rating,
+        image:image,
+        category:category,
+        seller:seller,
+        description:description,
+        quantity:quantity
+      }
+    })}
+  }
 
   function addtobasket(){
 
@@ -15,7 +44,7 @@ function Book({id,title,author,image,price,rating,quantity,category,seller,descr
       item:{
         key:id,
         id:id,
-        title,
+        title:title,
         price:price,
         rating:rating,
         image:image,
@@ -70,10 +99,13 @@ function Book({id,title,author,image,price,rating,quantity,category,seller,descr
         <Link to='/Book_seperate'>
           <img className='book_img' src={image} onClick={viewBook}/>
           </Link>
+            <IconButton className='favIcon' onClick={()=>{setFav(!fav);
+            favourites(fav);}}>
+            {fav?<FavoriteIcon className='fav'/>:<FavoriteBorderIcon />}
+            </IconButton>
               {quantity>=1?<button className="add_to_cart" onClick={addtobasket}>Add to Cart</button>:""}
         
-       
-    </div>
+    </div>  
   )
 }
 

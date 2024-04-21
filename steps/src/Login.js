@@ -25,8 +25,10 @@ function Login() {
             dispatch({
                 type:'login',
                 user:data.data.userName,
+                userLastname:data.data.lastName,
                 userAddress:data.data.userAddress,
-                userEmail:data.data.userEmail
+                userEmail:data.data.userEmail,
+                userContact:data.data.userContact
             })
             // console.log(data.data.userName);
             history.push('/');

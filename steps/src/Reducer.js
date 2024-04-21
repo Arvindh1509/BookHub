@@ -3,11 +3,13 @@ export const initialState={
     order:[],
     viewedBook:null,
     user:null,
+    userLastname:null,
     userEmail:null,
     userAddress:null,
+    userContact:null,
     checkbox:false,
     price:0,
-
+    favourite:[],
     direct_order:[],
     direct_price:0
 }
@@ -29,8 +31,10 @@ function reducer(state,action){
                 return{
                     ...state,
                     user:action.user,
+                    userLastname:action.userLastname,
                     userAddress:action.userAddress,
-                    userEmail:action.userEmail
+                    userEmail:action.userEmail,
+                    userContact:action.userContact
                 }
 
         case 'logout':
@@ -76,6 +80,18 @@ function reducer(state,action){
                     order:action.payload.basket,
                     price:action.payload.price
                 }
+
+        case 'add_to_fav':
+            return{
+                ...state,
+                favourite:[...state.favourite,action.item]
+            }
+
+        case 'remove_from_fav': 
+            return{
+                ...state,favourite:state.favourite.filter(item =>
+                    item.id !== action.id)
+            }
             
         case 'empty_basket':
                return {
@@ -98,7 +114,12 @@ function reducer(state,action){
                  ...state,
                   direct_order:[]
               }
-            
+        case 'editBuyer':
+            return{
+                ...state,
+                user:action.user,
+                userAddress:action.userAddress
+            }
                 
         default:
             return state;
