@@ -11,7 +11,8 @@ export const initialState={
     price:0,
     favourite:[],
     direct_order:[],
-    direct_price:0
+    direct_price:0,
+    favArr:[]
 }
 
 export const getBasketTotal  = (basket,checkbox) =>{ 
@@ -46,7 +47,8 @@ function reducer(state,action){
                 user:null,
                 userAddress:null,
                 checkbox:false,
-                price:0
+                price:0,
+                favArr:[]
             }
 
         case 'add_to_basket': //from book.js and book_seperate.js
@@ -84,13 +86,13 @@ function reducer(state,action){
         case 'add_to_fav':
             return{
                 ...state,
-                favourite:[...state.favourite,action.item]
+                favArr:[...state.favArr,action.id]
             }
 
         case 'remove_from_fav': 
             return{
-                ...state,favourite:state.favourite.filter(item =>
-                    item.id !== action.id)
+                ...state,favArr:state.favArr.filter(item =>
+                    item !== action.id)
             }
             
         case 'empty_basket':
@@ -98,6 +100,11 @@ function reducer(state,action){
                 ...state,
                 basket:[],
                 }
+        case 'favArr':
+            return{
+                ...state,
+                favArr:action.favArr
+            }
 
         case 'direct_order':
             {

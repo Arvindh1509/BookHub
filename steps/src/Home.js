@@ -4,15 +4,31 @@ import top_image from './images/Top_image_website.jpg';
 import Book from './Book';
 import axios from './axios';
 import AnimatedPage from './AnimatedPage';
+import { useStateValue } from './Stateprovider';
 
 function Home({search1}) {
 
   const [books,setBooks]=useState([]);
   const [backup,setBackup]=useState([]);
-console.log(search1);
-  useEffect(()=>{
-    fetchBooks();
-  },[]);
+  const [{userEmail,favArr},dispatch]=useStateValue();
+  console.log(favArr);
+  const [{favBook,setFavBook}]=useState([])
+// console.log(search1);
+useEffect(() => {
+  if(userEmail){axios.post('/booksRes',{userEmail})
+  .then(data=>{  
+    setFavBook(data.data);
+    dispatch({
+      type:"favArr",
+      favArr:favBook
+    })
+  }).
+  catch(err=>console.log(err))
+  fetchBooks()}
+     else
+      fetchBooks();
+}, []);
+
   
   useEffect(()=>{
     if(search1==""){
@@ -22,6 +38,7 @@ console.log(search1);
     setBooks(arr);
     }
   },[search1])
+  
   function fetchBooks() {
     axios.get('/books')
       .then(response => {
@@ -63,59 +80,14 @@ books.map((record,index)=>
       category={record[7]}
       seller={record[8]}
       description={record[9]?record[9]:default_description}
+      
 />  
 
     )):<div>
       <h1>No results</h1>
     </div>}
 
-    
-{/* 
-         <Book id={1} title="With a mind to kill: A James Bond Novel Kindle Edition
-by Ian Fleming (Author) | Format: Kindle Edition" author={"Antony Horowitz"}
-          image={'https://www.jamesbondlifestyle.com/sites/default/files/ckeditor/images/news/121215-with-a-mind-to-kill-cover.jpg'}
-          price={200} rating={5}
-          quantity={10}
-          description={description}
-        />
-        <Book id={2} title="Casino Royale: A James Bond Novel Kindle Edition
-by Ian Fleming (Author) | Format: Kindle Edition" author={"ian flemming"}
-          image={'https://m.media-amazon.com/images/I/41NceAE+NpL._SY445_SX342_.jpg'}
-          price={250} rating={4}
-          quantity={0}
-          description={description}
-        />
 
-         
-      {/* <div className='product_row'> */}
-      {/* <Book id={3} title="Moonraker: A James Bond Novel Kindle Edition
-by Ian Fleming (Author) | Format: Kindle Edition"
-image={'https://m.media-amazon.com/images/I/41tPxOdq0+L._SY445_SX342_.jpg'}
-          price={350} rating={4}
-          quantity={10}
-          description={description}
-        />
-      <Book id={4} title="Live and let Die: A James Bond Novel Kindle Edition
-by Ian Fleming (Author) | Format: Kindle Edition"
-image={'https://m.media-amazon.com/images/I/71ig4bm5rsL._SL1500_.jpg'}
-          price={400} rating={4}
-          quantity={10}
-          description={description}
-        />
-      <Book id={5} title="Thunderball: A James Bond Novel Kindle Edition
-by Ian Fleming (Author) | Format: Kindle Edition"
-image={'https://m.media-amazon.com/images/I/41Jwy4IWtCL._SY445_SX342_.jpg'}
-          price={450} rating={4}
-          quantity={10}
-          description={description}
-        /> <Book id={5} title="Thunderball: A James Bond Novel Kindle Edition
-by Ian Fleming (Author) | Format: Kindle Edition"
-image={'https://m.media-amazon.com/images/I/41Jwy4IWtCL._SY445_SX342_.jpg'}
-          price={450} rating={4}
-          quantity={10}
-          description={description}
-        />  */} 
-     {/* </div> */}
       </div>
       </div>
     </div>

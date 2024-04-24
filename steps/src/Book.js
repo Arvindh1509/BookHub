@@ -1,40 +1,41 @@
 import React, { useEffect, useState } from 'react'
 import './Book.css'
 import { useStateValue } from './Stateprovider';
-import { Link } from 'react-router-dom/cjs/react-router-dom.min';
+import { Link, useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 import StarIcon from '@mui/icons-material/Star';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import { Icon, IconButton } from '@mui/material';
+import axios from './axios'
 
 function Book({id,title,author,image,price,rating,quantity,category,seller,description}) {
 
-  const [{basket,favourite},dispatch] = useStateValue();
-  const [fav,setFav]=useState(false);
-
-  // useEffect(()=>{console.log("Favourites>>>>>",favourite);}
-  // ,[fav]);
-
+  
+  const [{user,userEmail,favArr},dispatch] = useStateValue();
+  
+  const [favour,setFavour]=useState(false);
+  const history=useHistory();
   function favourites(favo){
-    {favo?dispatch({
+    
+    if(user){
+      if(favo)
+      {dispatch({
       type:'remove_from_fav',
       id:id
-    }):
-    dispatch({
+    });
+    axios.post('/removefav',{userEmail,id});
+  }
+    else
+   { dispatch({
       type:'add_to_fav',
-      item:{
-        key:id,
-        id:id,
-        title,
-        price:price,
-        rating:rating,
-        image:image,
-        category:category,
-        seller:seller,
-        description:description,
-        quantity:quantity
-      }
-    })}
+      id:id,
+    });
+    axios.post(`/putfav`,{userEmail,id});
+  }
+  }
+    else{
+      history.push('/login')
+    }
   }
 
   function addtobasket(){
@@ -99,10 +100,12 @@ function Book({id,title,author,image,price,rating,quantity,category,seller,descr
         <Link to='/Book_seperate'>
           <img className='book_img' src={image} onClick={viewBook}/>
           </Link>
-            <IconButton className='favIcon' onClick={()=>{setFav(!fav);
-            favourites(fav);}}>
-            {fav?<FavoriteIcon className='fav'/>:<FavoriteBorderIcon />}
-            </IconButton>
+          
+          <IconButton className='favIcon' onClick={() => {
+            favArr.includes(id)?favourites(true):favourites(false)
+            }}>
+            {favArr.includes(id) ? (<FavoriteIcon className='fav'/>) : <FavoriteBorderIcon />}
+          </IconButton>
               {quantity>=1?<button className="add_to_cart" onClick={addtobasket}>Add to Cart</button>:""}
         
     </div>  

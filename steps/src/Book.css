@@ -20,12 +20,8 @@
     width: 100%;
 }
 
-.book > button{
-    background-color: gainsboro;
-    border: 1px solid;
-    color: #111;
-    border-radius: 10px;
-
+.book_img:hover{
+    border: 2px solid gold;
 }
 
 .book_price
@@ -51,15 +47,33 @@
 }
 
 .add_to_cart{
-   background-color: red;
+    background-color: red;
+    border-radius: 5px;
+    width: 80%;
+    height: 30px;
+    border: 1px solid;
+    margin-top: 1px;
+    color: white;
+    font-weight: 650;
     cursor: pointer;
 }
 
-.favIcon{
-    border:none
+.add_to_cart:hover{
+    background-color: whitesmoke;
+    border-radius: 5px;
+    width: 80%;
+    height: 30px;
+    border: 1px solid;
+    margin-top: 1px;
+    color: black;
+    font-weight: 650;
+    cursor: pointer;
 }
+
 
 .fav{
     color: red;
 }
+
+
 

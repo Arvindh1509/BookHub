@@ -1,45 +1,52 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import './Checkout.css';
-import Subtotal from './Subtotal';
 import CheckoutBook from './CheckoutBook';
 import { useStateValue } from './Stateprovider';
-import { getBasketTotal } from './Reducer';
 import AnimatedPage from './AnimatedPage';
+import axios from './axios';
 
 function Wishlist() {
-  const [{basket,checkbox,favourite,viewedBook}]=useStateValue();
-
-  console.log("Length of Wishlist",favourite.length)
+  const [{userEmail},dispatch]=useStateValue();
+  const [favBooks,setFavBooks]=useState(null)
+  useEffect(()=>{
+    axios.post('/getfav',{userEmail})
+    .then((result)=>{
+      const data=result.data; 
+      setFavBooks(data); 
+    }) 
+    .catch(error=>{
+      console.log("error:",error);
+    })
+  },[favBooks])
 
   return (
     <AnimatedPage>
 
     <div className='checkout'>
-    {/* {console.log("The basket price>>>",getBasketTotal(basket,!checkbox))} */}
+    
       <div className='checkout-left'>
        <div>
         <h2 className='checkout_title'>
            Your Wish List !
         </h2>
 
-        {console.log(basket)}
- 
-{favourite.length>0?favourite.map(item => (
+{favBooks?favBooks.map(items=>(
+  items.map(item=>(
     <CheckoutBook
-        key={item.id} // Assuming you need a key prop for each item in a list
-        id={item.id}
-        title={item.title}
-        image={item.image}
-        price={item.price}
-        rating={item.rating} 
-        description={item.description}
-        hidebutton={false}
-        quantity={item.quantity}
-        category={item.category}
-        seller={item.seller}
-
+        key={item[0]} // Assuming  you need a key prop for each item in a list
+        id={item[0]}
+        title={item[1]}
+        image={item[3]}
+        price={item[4]} 
+        rating={item[5]}  
+        hidebutton={false} 
+        quantity={item[6]}
+        category={item[7]}
+        seller={item[8]}
         favour={true}
     />
+  ))
+ 
 )):
 <div className='NoFavs'>
 <h3 >No Items in the wishlist!</h3>

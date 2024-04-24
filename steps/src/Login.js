@@ -21,7 +21,18 @@ function Login() {
             setEmail("");
             setPassword("");
             alert("Logged In");
-            {console.log(data.data.userAddress)}
+            console.log(data.data.isbns);
+            const favArr=[]
+            data.data.isbns.map(items=>(
+                items.map(item=>{
+                  favArr.push(item)
+                })
+            ))
+            dispatch({
+                type:'favArr',
+                favArr:favArr
+            })
+            {console.log(favArr)}
             dispatch({
                 type:'login',
                 user:data.data.userName,

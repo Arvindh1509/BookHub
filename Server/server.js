@@ -4,10 +4,11 @@ const bodyParser = require('body-parser');
 const OracleDB = require('oracledb');
 const bcrypt=require('bcrypt');
 const app = express();
-const port = 8000;
+const port = 7000;
 const env=require('dotenv');
 // IN Account
-const stripe=require('stripe')(process.env.SECRETKEY)
+//  const stripe=require('stripe')(process.env.SECRETKEY)
+ const stripe=require('stripe')('sk_test_51Os1YBSGWWLum80tqVobh8TE5LCKrPFCdftpDgZ5rBaUn2RQ6YVXELia5xpjgnChIcqincdLubYRMZGSPL359I2y00ECuNJO9F')
 // US Account
 // const stripe=require('stripe')(process.env.USASECRETKEY);
 
@@ -35,6 +36,26 @@ app.get('/books', async (req, res) => {
     res.status(500).send("Error in accessing the table");
   }
 });
+
+app.post('/booksRes',async(req,res)=>{
+  try {
+    const userEmail=req.body.userEmail;
+    const sql=  `SELECT ISBN FROM FAVOURITES WHERE EMAIL=:userEmail`;
+    const connection=await OracleDB.getConnection(dbConfig);
+    const result=await connection.execute(sql,{userEmail:userEmail});
+    let favArr=[];
+    result.rows.forEach(row => {
+      row.forEach(value => {
+          favArr.push(value);
+      });
+  });
+    console.log(favArr)
+    res.send(favArr)
+  } catch (error) {
+    res.send(error)
+    console.log(error);
+  }
+})
 
 app.post('/books_seller',async(req,res)=>{
   try {
@@ -71,10 +92,10 @@ app.post('/ordersHistory',async(req,res)=>{
    
     
     var orderisbns = {};
-    
+    console.log(orderid);
     for (const orderIdArr of Object.values(orderid)) {
       const orderId = orderIdArr;
-  
+ 
       const ans = await connection.execute(`SELECT * 
       FROM BOOKS 
       WHERE ISBN IN (SELECT P.ISBN 
@@ -99,24 +120,6 @@ app.post('/ordersHistory',async(req,res)=>{
     
   }
 }) 
-
-// why is it here?? 
-// app.post('/ordersample', async(req,res)=>{
-
-//   const details=req.body.email;
-//   const connection=OracleDB.getConnection(dbConfig);
-
-//   var ans;
-//   details.map(item=>{
-//    try{ ans= connection.execute(`SELECT P.ISBN FROM ORDERS O JOIN ORDER_ITEMS P
-//                             ON O.ORDER_ID = P.ORDER_ID WHERE O.ORDER_ID = :orderId`, { orderId: item })
-//     console.log(ans.rows);}
-//     catch(err){
-//       console.log(err);
-//     }
-//   })
-// })
-
 
 // used for inserting books through thunder
 app.post('/book_insert',async(req,res)=>{
@@ -243,7 +246,9 @@ app.post('/login', async (req, res) => {
       const userDetails=req.body;
   
       const connection = await OracleDB.getConnection(dbConfig);
-
+      const favourites=await connection.execute(`SELECT ISBN FROM FAVOURITES WHERE EMAIL=:email`,[userDetails.email]);
+      const isbns=favourites.rows
+      console.log(isbns);
       const checkResult=await connection.execute(`SELECT * FROM USERS WHERE EMAIL=:email`,[userDetails.email]);  
       if(checkResult.rows.length>0){
         // console.log(checkResult.rows);
@@ -266,8 +271,13 @@ app.post('/login', async (req, res) => {
             console.log("error in comparison during login");
           }
           else{
+            
            if(result)
-           { res.send({userName,userAddress,userEmail,lastName,userContact});
+           { 
+            // console.log(userEmail);
+            
+            
+            res.send({userName,userAddress,userEmail,lastName,userContact,isbns});
            
           // console.log(userName);
         }
@@ -639,6 +649,73 @@ app.post('/edit_quantity',async(req,res)=>{
   }
 })
 
+app.post('/getfav',async(req,res)=>{
+  try {
+    
+    let Email=req.body.userEmail;
+
+    const connection = await OracleDB.getConnection(dbConfig);
+    let favisbns={};
+    let answer=[];
+    const cart=await connection.execute(`SELECT ISBN FROM FAVOURITES WHERE EMAIL=:email`,{Email});
+    for (const [index, row] of cart.rows.entries()) {
+      favisbns[`${index + 1}`] = row[0];}
+    var orderisbns = {};
+    for (const isbn of Object.values(favisbns)) {
+       
+      const ans = await connection.execute(`SELECT * 
+      FROM BOOKS 
+      WHERE ISBN = :isbn`, { isbn: isbn });
+                  
+      orderisbns[`${isbn}`] = ans.rows;    
+      answer.push(orderisbns[isbn]);
+
+      console.log("reqd>>>>",answer);
+    }
+    
+    res.send(answer);
+  } catch (error) {
+    console.log(error);
+  }
+})
+
+app.post('/putfav',async(req,res)=>{
+  try {
+    const userDetails=req.body
+    const binds={
+      userEmail:userDetails.userEmail,
+      id:userDetails.id
+    }
+    const connection=await OracleDB.getConnection(dbConfig);
+    const sql= `insert into favourites(EMAIL,ISBN) values(:userEmail,:id)`;
+
+    const result=await connection.execute(sql,binds,{autoCommit:true});
+    console.log("added to fav");
+    res.send("added to fav");
+
+  } catch (error) {
+    console.log(error);
+  }
+})
+
+app.post('/removefav',async(req,res)=>{
+  try {
+    const userDetails=req.body
+    const binds={
+      userEmail:userDetails.userEmail,
+      id:userDetails.id
+    }
+    const connection=await OracleDB.getConnection(dbConfig);
+    const sql= `delete from favourites where email=:userEmail and isbn=:id`;
+
+    const result=await connection.execute(sql,binds,{autoCommit:true});
+    console.log("removed from fav");
+    res.send("removed from fav");
+
+  } catch (error) {
+    console.log(error);
+  }
+})
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}!`);
 });

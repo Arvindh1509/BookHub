@@ -4,9 +4,10 @@ import { useStateValue } from './Stateprovider'
 import StarIcon from '@mui/icons-material/Star';
 import { Link } from 'react-router-dom/cjs/react-router-dom.min';
 import AnimatedPage from './AnimatedPage';
+import axios from './axios';
 
 function CheckoutBook({id,favour,title,image,price,rating,description,hidebutton,quantity,category,seller}) {
-const[{viewedBook,basket},dispatch]=useStateValue();
+const[{viewedBook,userEmail,basket},dispatch]=useStateValue();
     function removefromCart(){
         (dispatch({
             type:'remove_item',
@@ -36,7 +37,8 @@ const[{viewedBook,basket},dispatch]=useStateValue();
       dispatch({
         type:'remove_from_fav',
         id:id
-      })
+      });
+      axios.post('/removefav',{userEmail,id});
     }
   return (
     <AnimatedPage>

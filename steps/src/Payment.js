@@ -149,7 +149,7 @@ function Payment({promise}) {
                 })
                 
         
-                useHistory.push('/OrdersHistory')
+                history.push('/OrdersHistory')
                 
           }
         },

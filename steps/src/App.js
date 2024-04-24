@@ -45,12 +45,12 @@ function App() {
           <LoginSeller/>
         </Route> */}
         <Route path='/Favourites'>
-        <Header/>
+        <Header searchChange={searchChange} />
             <Wishlist/>
           </Route>
 
           <Route path='/Profile'>
-            <Header/>
+          <Header searchChange={searchChange} />
             <Profile/>
           </Route>
 
@@ -61,7 +61,7 @@ function App() {
 
         {/* Check out page */}
           <Route path='/checkout'> 
-            <Header />
+          <Header searchChange={searchChange} />
             {/* also contains the checkout separate book components 
             and also the subtotal component*/}
             <Checkout /> 
@@ -70,7 +70,7 @@ function App() {
           {/* has orderHistory component and checkout_book component
           and called orderHistory api*/}
           <Route path='/OrdersHistory'>
-            <Header/>
+          <Header searchChange={searchChange} />
             <OrdersHistory/>
           </Route>
 
@@ -87,14 +87,14 @@ function App() {
 
           {/* called when image is clicked in book component */}
           <Route path='/Book_seperate'>
-            <Header />
+          <Header searchChange={searchChange} />
             <Book_seperate/>
           </Route>
 
           {/* From Subtotal getting navigated & does payment by calling
           payments/create, order_placing, order_item_placing*/}
           <Route path='/payment'>
-            <Header/>
+          <Header searchChange={searchChange} />
             <Elements stripe={promise}>
             <Payment promise={promise}/>
             </Elements>

@@ -6,10 +6,8 @@
 import { useStateValue } from './Stateprovider';
 import { useState } from 'react';
 import AnimatedPage from './AnimatedPage';
-import { Avatar } from '@mui/material';
-import {ArrowDropDownOutlined } from "@mui/icons-material";
-
-import Button from '@mui/material/Button';
+import { Icon } from '@mui/material';
+import {ArrowDropDown } from "@mui/icons-material";
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
   
@@ -42,10 +40,6 @@ import MenuItem from '@mui/material/MenuItem';
     setAnchorEl(null);
   };
 
-    // function handleSeller(){
-    //     history.push('http://localhost:4000/loginSeller')
-    // }
-
     return (
         <AnimatedPage>
 
@@ -64,12 +58,34 @@ import MenuItem from '@mui/material/MenuItem';
         </div>
         <div className='header_nav'>
         
-            <div onClick={user?handleSignOut:handleSigning} className='header_Options'>
+            <div className='header_Options'>
                 <span className='header_lineone'>
-                    Hello {user?user:"guest"}
+                    Hello 
                 </span>
                 <span className='header_linetwo'>
-                    {user?"Sign Out":"Sign In"}
+                {user?user:"guest"}
+      <div >
+      <Icon onClick={handleClick} >
+        <ArrowDropDown sx={{color:'white'}}/>
+      </Icon>
+      <Menu
+        id="basic-menu"
+        anchorEl={anchorEl}
+        open={open}
+        onClose={handleClose}
+        MenuListProps={{
+          'aria-labelledby': 'basic-button',
+        }}
+      >
+        {user?<MenuItem onClick={()=>{handleClose(); history.push('/Profile')} }>Profile</MenuItem>:""}
+        {user?<MenuItem onClick={()=>{handleClose(); history.push('/Favourites')}}>Favourites</MenuItem>:""}
+        {user?<MenuItem onClick={()=>{handleClose(); user?handleOrders():handleSigning()}}>Returns and Orders</MenuItem>:""}
+        {user?<MenuItem onClick={()=>{handleSignOut();}}>Sign Out</MenuItem>:<MenuItem onClick={()=>{handleSigning();}}>Sign In</MenuItem>}
+        
+      </Menu>
+    </div>
+
+                    {/* {user?"Sign Out":"Sign In"} */}
                 </span>
             </div>
             
@@ -83,30 +99,7 @@ import MenuItem from '@mui/material/MenuItem';
                 </span>
             </div>
             {/* </Link> */}
-            <div >
-      <Button
-        id="basic-button"
-        aria-controls={open ? 'basic-menu' : undefined}
-        aria-haspopup="true"
-        aria-expanded={open ? 'true' : undefined}
-        onClick={handleClick}
-      >
-        <Avatar sx={{ width:'90%'}} />
-      </Button>
-      <Menu
-        id="basic-menu"
-        anchorEl={anchorEl}
-        open={open}
-        onClose={handleClose}
-        MenuListProps={{
-          'aria-labelledby': 'basic-button',
-        }}
-      >
-        <MenuItem onClick={()=>{handleClose(); history.push('/Profile')} }>Profile</MenuItem>
-        <MenuItem onClick={()=>{handleClose(); history.push('/Favourites')}}>Favourites</MenuItem>
-        <MenuItem onClick={()=>{handleClose(); user?handleOrders():handleSigning()}}>Returns and Orders</MenuItem>
-      </Menu>
-    </div>
+            
             {/* <div className='header_Options' onClick={user?handleOrders:handleSigning}>
             <span className='header_lineone'>
                     Returns &
