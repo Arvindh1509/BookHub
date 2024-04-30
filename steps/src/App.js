@@ -18,10 +18,7 @@ import AnimatedPage from './AnimatedPage';
 import Wishlist from './Wishlist';
 import Profile from './Profile';
 // import LoginSeller from '../../BookHub-Seller-main/seller/src/scenes/Login';
-
- const promise=loadStripe('pk_test_51Os1YBSGWWLum80t1jDc4VyVDFG3mT5kPSfzZeWaOktoIisebvL1BORdBFlifXjzauFxtOqMLBk2x98iiaYzm282003Plbj1uo')
-// const promise=loadStripe('pk_test_51P3djB03iUD21U4garcN9aX1xotpSJSGzJyz0shtS5dcY0ixGBADILeShBboxjzyHlvjJ21ROHHVphrjrMFhQwie00valKBlik')
-
+const promise = loadStripe(process.env.STRIPEPUBLISHABLEKEY);
 
 function App() {
 

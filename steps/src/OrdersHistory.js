@@ -18,15 +18,16 @@ function OrdersHistory() {
       const data=result.data;
       
       console.log(checkbox);
+      
       setOrderData(data);
-     
+      orderData.orderisbns==null?console.log("Orderdata>>>>>>NULL"):console.log("Orderdata")
     })
     .catch(error=>{
       console.log("error:",error);  
     }) 
 
     
-  },[orderData]); 
+  },[]); 
 
 const today = new Date();
 const day = today.getDate();
@@ -39,9 +40,8 @@ return (
 
   <div className='orders'>
     <div className='order_title'>
-      <h1>Orders History</h1>    
-      
-    </div>  
+      <h1>Orders History</h1>          
+    </div>  {console.log(orderData)}
     {
       orderData? Object.keys(orderData.orderid,).map(orderId=>
     { 
@@ -52,25 +52,25 @@ return (
                   <div className='order_header'>
                     <div>
                     
-               <h2>Order No: {orderData.orderid[orderId]}</h2> 
+                      <h2>Order No: {orderData.orderid[orderId]}</h2> 
                       <span className='order-date'>
 
                      <p><strong>Order placed on</strong></p>
                      {
-      (() => {
-        const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
-        const date = new Date(orderData.order_date[orderId]);
-        const formattedDate = date.toLocaleDateString('en-GB', options);
-        return (
-          <p>{formattedDate}</p> 
-        );
-      })()
-    }
+                          (() => {
+                            const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
+                            const date = new Date(orderData.order_date[orderId]);
+                            const formattedDate = date.toLocaleDateString('en-GB', options);
+                            return (
+                              <p>{formattedDate}</p> 
+                            );
+                          })()
+                        }
                       </span>
                     </div>
-                  {checkbox?<p className='gift'>This is a gift</p>:""}
+                    {checkbox?<p className='gift'>This is a gift</p>:""}
                  
-                  <CurrencyFormat 
+                    <CurrencyFormat 
                     renderText={(value)=>(
                         <div className='currency'>
                        <h4>Order Total:</h4>               
@@ -82,20 +82,22 @@ return (
                     displayType={'text'}
                     thousandSeparator={true}
                     prefix='₹'
-                  />
-                  <div className='order_header_address'>
-                    <h4>Ship to</h4>
-                    <p>{user}</p>
-                  </div>
-                </div> 
-                {/* orderheader */}
-                {/* header finished */}
-                <div className='order_container'>
+                    />
+                    <div className='order_header_address'>
+                      <h4>Ship to</h4>
+                      <p>{user}</p>
+                    </div>
+                    </div> 
+                  {/* orderheader */}
+                  {/* header finished */}
+                  <div className='order_container'>
                   {orderData.orderisbns[orderData.orderid[orderId]].map(o=>{
                   return ( <CheckoutBook 
                   key={o[0]} id={o[0]} title={o[1]} image={o[3]} price={o[4]} rating={o[5]}/> )
                   })}
+                  
                 </div>
+                <button className='btn_review'>Review the Book!</button>
               </div>
               
               </div>

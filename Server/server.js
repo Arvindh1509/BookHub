@@ -7,8 +7,7 @@ const app = express();
 const port = 7000;
 const env=require('dotenv');
 // IN Account
-//  const stripe=require('stripe')(process.env.SECRETKEY)
- const stripe=require('stripe')('sk_test_51Os1YBSGWWLum80tqVobh8TE5LCKrPFCdftpDgZ5rBaUn2RQ6YVXELia5xpjgnChIcqincdLubYRMZGSPL359I2y00ECuNJO9F')
+const stripe=require('stripe')(process.env.SECRETKEY)
 // US Account
 // const stripe=require('stripe')(process.env.USASECRETKEY);
 
@@ -85,14 +84,12 @@ app.post('/ordersHistory',async(req,res)=>{
     order by order_id desc`,{Email});
     for (const [index, row] of cart.rows.entries()) {
       orderid[`${index + 1}`] = row[0];
-      console.log(row[1]);
+      // console.log(row[1]);
       totalAmt[`${index + 1}`] = row[1];
       order_date[`${index+1}`]=row[2];
     }
-   
-    
     var orderisbns = {};
-    console.log(orderid);
+    // console.log(orderid);
     for (const orderIdArr of Object.values(orderid)) {
       const orderId = orderIdArr;
  
@@ -104,14 +101,7 @@ app.post('/ordersHistory',async(req,res)=>{
                      WHERE O.ORDER_ID = :orderid)`, { orderid: orderId });
                   
       orderisbns[`${orderId}`] = ans.rows; 
-
-      
-
-
-     
     }
-    
-
     res.send({orderid,orderisbns,totalAmt,order_date});
 
   } catch (error) {

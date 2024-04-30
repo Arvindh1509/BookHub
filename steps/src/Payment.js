@@ -116,8 +116,8 @@ function Payment({promise}) {
         console.log("HIIIIIIIIIIII",total);
         
         var options={
-          key:"rzp_test_sd095naLU4rfSS",
-          key_secret:"yL6GOwd56hVBBZIGvvwNPVs8",
+          key:process.env.RAZORKEY,
+          key_secret:process.env.RAZORSKEY,
           amount:total,
           currency:"INR",
           name:"Projects",
@@ -155,8 +155,8 @@ function Payment({promise}) {
         },
           prefill:{
             name:"arvindh",
-            email:"rockstararvindh@gmail.com",
-            contact:"9345198715"
+            email:process.env.RAZORGMAIL,
+            contact:process.env.RAZORPHONE
           },
           notes:{
             address:"RazorPay Corporate Office"
