@@ -12,7 +12,7 @@ import AdBanners from './AdBanners';
 import Payment from './Payment';
 import {loadStripe} from "@stripe/stripe-js"
 import {Elements } from "@stripe/react-stripe-js"
-import Payment_direct from './Payment_direct';
+// import Payment_direct from './Payment_direct';
 import { useState } from 'react';
 import AnimatedPage from './AnimatedPage';
 import Wishlist from './Wishlist';
@@ -52,9 +52,9 @@ function App() {
           </Route>
 
 
-        <Route path='/samplePayment'>
+        {/* <Route path='/samplePayment'>
             <Payment_direct/>
-          </Route>
+          </Route> */}
 
         {/* Check out page */}
           <Route path='/checkout'> 
@@ -108,10 +108,7 @@ function App() {
             <AdBanners/>
           </Route>
 
-          <Route path='/samplePayment'>
-            <Payment_direct/>
-          </Route>
-
+          //
           
 
        </Switch>
